@@ -24,6 +24,58 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
     if (fontScale <= 0.9) return Math.min(baseSize * 1.1, baseSize + 2);
     return baseSize;
   };
+
+  const getCategoryWidth = () => {
+    if (fontScale >= 2) return 90;
+    if (fontScale >= 1.6) return 85;
+    if (fontScale >= 1.3) return 82;
+    return 80;
+  };
+
+  const getCategoryHeight = () => {
+    if (fontScale >= 2) return 90;
+    if (fontScale >= 1.6) return 85;
+    if (fontScale >= 1.3) return 82;
+    return 80;
+  };
+
+  const getCategoryBorderRadius = () => {
+    if (fontScale >= 2) return 45;
+    if (fontScale >= 1.6) return 42.5;
+    if (fontScale >= 1.3) return 41;
+    return 40;
+  };
+
+  const getCategoryMarginRight = () => {
+    if (fontScale >= 1.6) return 25;
+    if (fontScale >= 1.3) return 22;
+    return 20;
+  };
+
+  const getCategoryMarginBottom = () => {
+    if (fontScale >= 1.6) return 12;
+    if (fontScale >= 1.3) return 10;
+    return 8;
+  };
+
+  const getIconSize = () => {
+    if (fontScale >= 2) return 40;
+    if (fontScale >= 1.6) return 45;
+    if (fontScale >= 1.3) return 47;
+    return 50;
+  };
+
+  const getTextMinHeight = () => {
+    if (fontScale >= 1.6) return 44;
+    if (fontScale >= 1.3) return 36;
+    return 'auto';
+  };
+
+  const getTextLineHeight = () => {
+    if (fontScale >= 1.6) return 22;
+    if (fontScale >= 1.3) return 18;
+    return undefined;
+  };
   return (
     <View style={[styles.categoriesContainer, {
       paddingVertical: (() => {
@@ -58,17 +110,8 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesGrid}>
         <TouchableOpacity 
           style={[styles.categoryItem, {
-            width: (() => {
-              if (fontScale >= 2) return 90;
-              if (fontScale >= 1.6) return 85;
-              if (fontScale >= 1.3) return 82;
-              return 80;
-            })(),
-            marginRight: (() => {
-              if (fontScale >= 1.6) return 25;
-              if (fontScale >= 1.3) return 22;
-              return 20;
-            })(),
+            width: getCategoryWidth(),
+            marginRight: getCategoryMarginRight(),
           }]}
           activeOpacity={0.7}
           onPress={() => {
@@ -76,89 +119,52 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
           }}
         >
           <View style={[styles.categoryIconContainer, {
-            width: (() => {
-              if (fontScale >= 2) return 90;
-              if (fontScale >= 1.6) return 85;
-              if (fontScale >= 1.3) return 82;
-              return 80;
-            })(),
-            height: (() => {
-              if (fontScale >= 2) return 90;
-              if (fontScale >= 1.6) return 85;
-              if (fontScale >= 1.3) return 82;
-              return 80;
-            })(),
-            borderRadius: (() => {
-              if (fontScale >= 2) return 45;
-              if (fontScale >= 1.6) return 42.5;
-              if (fontScale >= 1.3) return 41;
-              return 40;
-            })(),
-            marginBottom: (() => {
-              if (fontScale >= 1.6) return 12;
-              if (fontScale >= 1.3) return 10;
-              return 8;
-            })(),
+            width: getCategoryWidth(),
+            height: getCategoryHeight(),
+            borderRadius: getCategoryBorderRadius(),
+            marginBottom: getCategoryMarginBottom(),
           }]}>
             <Image 
               source={require('../../assets/subjects.png')} 
               style={[styles.categoryIcon, {
-                width: (() => {
-                  if (fontScale >= 2) return 40;
-                  if (fontScale >= 1.6) return 45;
-                  if (fontScale >= 1.3) return 47;
-                  return 50;
-                })(),
-                height: (() => {
-                  if (fontScale >= 2) return 40;
-                  if (fontScale >= 1.6) return 45;
-                  if (fontScale >= 1.3) return 47;
-                  return 50;
-                })(),
+                width: getIconSize(),
+                height: getIconSize(),
               }]}
               resizeMode="contain"
             />
           </View>
           <Text style={[styles.categoryText, {
             fontSize: getResponsiveFontSize(11),
-            minHeight: (() => {
-              if (fontScale >= 1.6) return 44;
-              if (fontScale >= 1.3) return 36;
-              return 'auto';
-            })(),
-            lineHeight: (() => {
-              if (fontScale >= 1.6) return 22;
-              if (fontScale >= 1.3) return 18;
-              return undefined;
-            })(),
+            minHeight: getTextMinHeight(),
+            lineHeight: getTextLineHeight(),
           }]}
           numberOfLines={fontScale >= 1.6 ? 2 : 1}
           >Subjects</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={[styles.categoryItem, {
-          width: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-          marginRight: fontScale >= 1.6 ? 25 : fontScale >= 1.3 ? 22 : 20,
+          width: getCategoryWidth(),
+          marginRight: getCategoryMarginRight(),
         }]} activeOpacity={0.7}>
           <View style={[styles.categoryIconContainer, {
-            width: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-            height: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-            borderRadius: fontScale >= 2 ? 45 : fontScale >= 1.6 ? 42.5 : fontScale >= 1.3 ? 41 : 40,
-            marginBottom: fontScale >= 1.6 ? 12 : fontScale >= 1.3 ? 10 : 8,
+            width: getCategoryWidth(),
+            height: getCategoryHeight(),
+            borderRadius: getCategoryBorderRadius(),
+            marginBottom: getCategoryMarginBottom(),
           }]}>
             <Image 
               source={require('../../assets/Daily Task.png')} 
               style={[styles.categoryIcon, {
-                width: fontScale >= 2 ? 40 : fontScale >= 1.6 ? 45 : fontScale >= 1.3 ? 47 : 50,
-                height: fontScale >= 2 ? 40 : fontScale >= 1.6 ? 45 : fontScale >= 1.3 ? 47 : 50,
+                width: getIconSize(),
+                height: getIconSize(),
               }]}
               resizeMode="contain"
             />
           </View>
           <Text style={[styles.categoryText, {
             fontSize: getResponsiveFontSize(11),
-            minHeight: fontScale >= 1.6 ? 44 : fontScale >= 1.3 ? 36 : 'auto',
-            lineHeight: fontScale >= 1.6 ? 22 : fontScale >= 1.3 ? 18 : undefined,
+            minHeight: getTextMinHeight(),
+            lineHeight: getTextLineHeight(),
           }]}
           numberOfLines={fontScale >= 1.6 ? 2 : 1}
           >Daily Task</Text>
@@ -166,59 +172,59 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
         
         <TouchableOpacity 
           style={[styles.categoryItem, {
-            width: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-            marginRight: fontScale >= 1.6 ? 25 : fontScale >= 1.3 ? 22 : 20,
+            width: getCategoryWidth(),
+            marginRight: getCategoryMarginRight(),
           }]} 
           activeOpacity={0.7}
           onPress={() => navigation?.navigate('Help')}
         >
           <View style={[styles.categoryIconContainer, {
-            width: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-            height: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-            borderRadius: fontScale >= 2 ? 45 : fontScale >= 1.6 ? 42.5 : fontScale >= 1.3 ? 41 : 40,
-            marginBottom: fontScale >= 1.6 ? 12 : fontScale >= 1.3 ? 10 : 8,
+            width: getCategoryWidth(),
+            height: getCategoryHeight(),
+            borderRadius: getCategoryBorderRadius(),
+            marginBottom: getCategoryMarginBottom(),
           }]}>
             <Image 
               source={require('../../assets/help.png')} 
               style={[styles.categoryIcon, {
-                width: fontScale >= 2 ? 40 : fontScale >= 1.6 ? 45 : fontScale >= 1.3 ? 47 : 50,
-                height: fontScale >= 2 ? 40 : fontScale >= 1.6 ? 45 : fontScale >= 1.3 ? 47 : 50,
+                width: getIconSize(),
+                height: getIconSize(),
               }]}
               resizeMode="contain"
             />
           </View>
           <Text style={[styles.categoryText, {
             fontSize: getResponsiveFontSize(11),
-            minHeight: fontScale >= 1.6 ? 44 : fontScale >= 1.3 ? 36 : 'auto',
-            lineHeight: fontScale >= 1.6 ? 22 : fontScale >= 1.3 ? 18 : undefined,
+            minHeight: getTextMinHeight(),
+            lineHeight: getTextLineHeight(),
           }]}
           numberOfLines={fontScale >= 1.6 ? 2 : 1}
           >Help</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={[styles.categoryItem, {
-          width: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-          marginRight: fontScale >= 1.6 ? 25 : fontScale >= 1.3 ? 22 : 20,
+          width: getCategoryWidth(),
+          marginRight: getCategoryMarginRight(),
         }]} activeOpacity={0.7}>
           <View style={[styles.categoryIconContainer, {
-            width: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-            height: fontScale >= 2 ? 90 : fontScale >= 1.6 ? 85 : fontScale >= 1.3 ? 82 : 80,
-            borderRadius: fontScale >= 2 ? 45 : fontScale >= 1.6 ? 42.5 : fontScale >= 1.3 ? 41 : 40,
-            marginBottom: fontScale >= 1.6 ? 12 : fontScale >= 1.3 ? 10 : 8,
+            width: getCategoryWidth(),
+            height: getCategoryHeight(),
+            borderRadius: getCategoryBorderRadius(),
+            marginBottom: getCategoryMarginBottom(),
           }]}>
             <Image 
               source={require('../../assets/progress.png')} 
               style={[styles.categoryIcon, {
-                width: fontScale >= 2 ? 40 : fontScale >= 1.6 ? 45 : fontScale >= 1.3 ? 47 : 50,
-                height: fontScale >= 2 ? 40 : fontScale >= 1.6 ? 45 : fontScale >= 1.3 ? 47 : 50,
+                width: getIconSize(),
+                height: getIconSize(),
               }]}
               resizeMode="contain"
             />
           </View>
           <Text style={[styles.categoryText, {
             fontSize: getResponsiveFontSize(11),
-            minHeight: fontScale >= 1.6 ? 44 : fontScale >= 1.3 ? 36 : 'auto',
-            lineHeight: fontScale >= 1.6 ? 22 : fontScale >= 1.3 ? 18 : undefined,
+            minHeight: getTextMinHeight(),
+            lineHeight: getTextLineHeight(),
           }]}
           numberOfLines={fontScale >= 1.6 ? 2 : 1}
           >Progress</Text>

@@ -69,6 +69,30 @@ const getIconSize = (fontScale: number, isLarge: boolean) => {
   };
 };
 
+const getTextMinHeight = (fontScale: number) => {
+  if (fontScale >= 1.6) return 44;
+  if (fontScale >= 1.3) return 36;
+  return 'auto';
+};
+
+const getTextLineHeight = (fontScale: number) => {
+  if (fontScale >= 1.6) return 22;
+  if (fontScale >= 1.3) return 18;
+  return undefined;
+};
+
+const getContainerMarginBottom = (fontScale: number) => {
+  if (fontScale >= 1.6) return 25;
+  if (fontScale >= 1.3) return 22;
+  return 20;
+};
+
+const getTitleMarginBottom = (fontScale: number) => {
+  if (fontScale >= 1.6) return 20;
+  if (fontScale >= 1.3) return 18;
+  return 15;
+};
+
 const OfferingButton: React.FC<{ item: OfferingItem; fontScale: number }> = ({ item, fontScale }) => {
   const dimensions = getResponsiveDimensions(fontScale);
   const iconSize = getIconSize(fontScale, item.isLarge || false);
@@ -105,8 +129,8 @@ const OfferingButton: React.FC<{ item: OfferingItem; fontScale: number }> = ({ i
           styles.offeringText,
           {
             fontSize: getResponsiveFontSize(11, fontScale),
-            minHeight: fontScale >= 1.6 ? 44 : (fontScale >= 1.3 ? 36 : 'auto'),
-            lineHeight: fontScale >= 1.6 ? 22 : (fontScale >= 1.3 ? 18 : undefined),
+            minHeight: getTextMinHeight(fontScale),
+            lineHeight: getTextLineHeight(fontScale),
           }
         ]}
         numberOfLines={fontScale >= 1.6 ? 2 : 1}
@@ -164,14 +188,14 @@ const QuickOfferings: React.FC = () => {
 
   return (
     <View style={[styles.offeringsContainer, {
-      marginBottom: fontScale >= 1.6 ? 25 : fontScale >= 1.3 ? 22 : 20,
+      marginBottom: getContainerMarginBottom(fontScale),
     }]}>
       <Text 
         style={[
           styles.offeringsTitle,
           {
             fontSize: getResponsiveFontSize(18, fontScale),
-            marginBottom: fontScale >= 1.6 ? 20 : fontScale >= 1.3 ? 18 : 15,
+            marginBottom: getTitleMarginBottom(fontScale),
           }
         ]}
         numberOfLines={fontScale >= 1.6 ? 2 : 1}

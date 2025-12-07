@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { getTutorAvailableSlots, TimeSlot } from '../../services/tutorAvailabilityService';
 
@@ -12,7 +12,7 @@ interface AvailabilityProps {
 }
 
 const Availability: React.FC<AvailabilityProps> = ({ onDayPress, onTimePress, onDatePress, onDurationPress, tutorId, hourlyRate }) => {
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
@@ -20,25 +20,24 @@ const Availability: React.FC<AvailabilityProps> = ({ onDayPress, onTimePress, on
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const times = ['9:00 AM', '10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'];
+  
   
   const fetchAvailableSlots = async (date: string) => {
-    // console.log('🔍 Fetching slots for tutorId:', tutorId, 'date:', date);
+    
     if (!tutorId) {
-      // console.log('⚠️ No tutorId provided');
+      
       return;
     }
     
     setIsLoading(true);
     
     const response = await getTutorAvailableSlots(tutorId, date);
-    // console.log('📡 Slots API response:', response);
+    
     if (response) {
-      // console.log('✅ Found', response.slots?.length || 0, 'available slots');
+      
       setAvailableSlots(response.slots);
     } else {
-      // console.log('❌ No slots response received');
+      
       setAvailableSlots([]);
     }
     setIsLoading(false);
@@ -89,14 +88,13 @@ const Availability: React.FC<AvailabilityProps> = ({ onDayPress, onTimePress, on
                 key={`${slot.start}-${slot.end}-${slot.price}`}
                 style={[styles.timeButton, isTimeSelected && styles.selectedButton]}
                 onPress={() => {
-                  // console.log('🔄 Time slot clicked:', timeDisplay);
-                  // console.log('📊 Slot details:', JSON.stringify(slot, null, 2));
+                
                   setSelectedTime(timeDisplay);
                   setSelectedSlot(slot);
                   setSelectedDuration(slot.sessionDuration);
-                  // console.log('✅ Calling onTimePress with:', timeDisplay, slot);
+                  
                   onTimePress?.(timeDisplay, slot);
-                  // console.log('✅ Calling onDurationPress with:', slot.sessionDuration);
+                  
                   onDurationPress?.(slot.sessionDuration);
                 }}
               >
@@ -135,14 +133,14 @@ const Availability: React.FC<AvailabilityProps> = ({ onDayPress, onTimePress, on
               key={date.full}
               style={[styles.dateButton, isSelected && styles.selectedButton]}
               onPress={() => {
-                // console.log('📅 Date button clicked:', date.full);
+                
                 setSelectedDate(date.full);
                 setSelectedTime(null);
                 setSelectedSlot(null);
                 setSelectedDuration(null);
-                // console.log('✅ Calling onDatePress with:', date.full);
+                
                 onDatePress?.(date.full);
-                // console.log('🔄 Fetching available slots for:', date.full);
+                
                 fetchAvailableSlots(date.full);
               }}
             >

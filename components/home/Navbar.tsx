@@ -24,9 +24,9 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ userGender = 'Male', userName = 'User', navigation: navProp, onMenuToggle }) => {
   const defaultNavigation = useNavigation<DrawerNavigationProp<any>>();
-  const navigation = navProp || defaultNavigation;
+  const navigation = navProp ?? defaultNavigation;
   const [menuVisible, setMenuVisible] = useState(false);
-  const menuSlideAnim = useState(new Animated.Value(-320))[0];
+  const [menuSlideAnim] = useState(new Animated.Value(-320));
   const { profile, loading } = useSelector((state: RootState) => state.user);
   const insets = useSafeAreaInsets();
 

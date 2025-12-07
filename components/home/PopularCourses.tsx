@@ -17,28 +17,157 @@ import { fetchCourses } from '../../store/courseSlice';
 
 const { width } = Dimensions.get('window');
 
+const getResponsiveFontSize = (fontScale: number, baseSize: number) => {
+  if (fontScale >= 2) return Math.max(baseSize * 0.5, 11);
+  if (fontScale >= 1.6) return Math.max(baseSize * 0.65, 12);
+  if (fontScale >= 1.3) return Math.max(baseSize * 0.8, 13);
+  if (fontScale <= 0.85) return Math.min(baseSize * 1.2, baseSize + 4);
+  if (fontScale <= 0.9) return Math.min(baseSize * 1.1, baseSize + 2);
+  return baseSize;
+};
+
+const getRating = (averageRating: string) => {
+  const rating = Number.parseFloat(averageRating);
+  return rating > 0 ? rating.toFixed(1) : '4.5';
+};
+
+const getCourseCardWidth = (fontScale: number) => {
+  if (fontScale >= 2) return 220;
+  if (fontScale >= 1.6) return 240;
+  if (fontScale >= 1.3) return 260;
+  if (fontScale <= 0.85) return 280;
+  return 250;
+};
+
+const getImageHeight = (fontScale: number) => {
+  if (fontScale >= 2) return 110;
+  if (fontScale >= 1.6) return 120;
+  return 130;
+};
+
+interface CourseCardProps {
+  course: any;
+  fontScale: number;
+  onPress: () => void;
+}
+
+const CourseCard: React.FC<CourseCardProps> = ({ course, fontScale, onPress }) => (
+  <TouchableOpacity 
+    style={[styles.courseCard, {
+      width: getCourseCardWidth(fontScale),
+      marginRight: fontScale >= 1.6 ? 18 : 15,
+    }]}
+    onPress={onPress}
+  >
+    <View style={[styles.courseImageContainer, {
+      height: getImageHeight(fontScale),
+      padding: fontScale >= 1.6 ? 10 : 8,
+    }]}>
+      <Image 
+        source={course.imageUrl ? { uri: course.imageUrl } : require('../../assets/courses.png')} 
+        style={styles.courseImage}
+        resizeMode="cover"
+      />
+      <TouchableOpacity style={[styles.reactionButton, {
+        top: fontScale >= 1.6 ? 20 : 18,
+        right: fontScale >= 1.6 ? 20 : 18,
+        padding: fontScale >= 1.6 ? 8 : 6,
+      }]}>
+        <Image 
+          source={require('../../assets/reaction.png')} 
+          style={[styles.reactionIcon, {
+            width: fontScale >= 1.6 ? 16 : 18,
+            height: fontScale >= 1.6 ? 16 : 18,
+          }]}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+    </View>
+    <View style={[styles.courseInfo, { padding: fontScale >= 1.6 ? 15 : 12 }]}>
+      <Text style={[styles.courseTitle, {
+        fontSize: getResponsiveFontSize(fontScale, 16),
+        marginBottom: fontScale >= 1.6 ? 6 : 4,
+      }]}
+      numberOfLines={fontScale >= 1.6 ? 2 : 1}
+      >{course.name}</Text>
+      <Text style={[styles.courseSubtitle, {
+        fontSize: getResponsiveFontSize(fontScale, 12),
+        marginBottom: fontScale >= 1.6 ? 15 : 12,
+      }]}
+      numberOfLines={fontScale >= 1.6 ? 2 : 1}
+      >{course.totalLectures} Lectures ({course.totalDuration})</Text>
+      
+      <View style={[styles.detailsRow, {
+        gap: fontScale >= 1.6 ? 10 : 8,
+        flexDirection: fontScale >= 2 ? 'column' : 'row',
+      }]}>
+        <DetailItem 
+          icon={require('../../assets/clock.png')}
+          text={course.totalDuration}
+          fontScale={fontScale}
+          containerStyle={styles.detailItemContainer}
+        />
+        <DetailItem 
+          icon={require('../../assets/dollarforcourse.png')}
+          text={course.discountPrice || course.price}
+          fontScale={fontScale}
+          containerStyle={styles.detailItemContainer}
+        />
+        <DetailItem 
+          icon={require('../../assets/imageforratingincoursecard.png')}
+          text={getRating(course.averageRating)}
+          fontScale={fontScale}
+          containerStyle={styles.ratingItemContainer}
+        />
+      </View>
+    </View>
+  </TouchableOpacity>
+);
+
+interface DetailItemProps {
+  icon: any;
+  text: string;
+  fontScale: number;
+  containerStyle: any;
+}
+
+const DetailItem: React.FC<DetailItemProps> = ({ icon, text, fontScale, containerStyle }) => (
+  <View style={[containerStyle, {
+    paddingVertical: fontScale >= 1.6 ? 8 : 6,
+    paddingHorizontal: fontScale >= 1.6 ? 10 : 8,
+    flex: fontScale >= 2? 0 : 1,
+    width: fontScale >= 2? '100%' : 'auto',
+  }]}>
+    <View style={[styles.durationContainer, { gap: fontScale >= 1.6 ? 3 : 2 }]}>
+      <Image 
+        source={icon} 
+        style={[styles.clockIcon, {
+          width: fontScale >= 1.6 ? 8 : 10,
+          height: fontScale >= 1.6 ? 8 : 10,
+        }]}
+        resizeMode="contain"
+      />
+      <Text style={[styles.durationText, {
+        fontSize: getResponsiveFontSize(fontScale, 10),
+      }]}>{text}</Text>
+    </View>
+  </View>
+);
+
 const PopularCourses: React.FC = () => {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch<AppDispatch>();
   const { courses, loading } = useSelector((state: RootState) => state.course);
   const fontScale = PixelRatio.getFontScale();
 
-  const getResponsiveFontSize = (baseSize: number) => {
-    if (fontScale >= 2.0) return Math.max(baseSize * 0.5, 11);
-    if (fontScale >= 1.6) return Math.max(baseSize * 0.65, 12);
-    if (fontScale >= 1.3) return Math.max(baseSize * 0.8, 13);
-    if (fontScale <= 0.85) return Math.min(baseSize * 1.2, baseSize + 4);
-    if (fontScale <= 0.9) return Math.min(baseSize * 1.1, baseSize + 2);
-    return baseSize;
-  };
-
   useEffect(() => {
     dispatch(fetchCourses());
   }, [dispatch]);
 
-  const getRating = (averageRating: string) => {
-    const rating = parseFloat(averageRating);
-    return rating > 0 ? rating.toFixed(1) : '4.5';
+  const getHeaderMarginBottom = () => {
+    if (fontScale >= 1.6) return 20;
+    if (fontScale >= 1.3) return 18;
+    return 15;
   };
 
   return (
@@ -46,16 +175,16 @@ const PopularCourses: React.FC = () => {
       marginBottom: fontScale >= 1.6 ? 15 : 10,
     }]}>
       <View style={[styles.coursesHeader, {
-        marginBottom: fontScale >= 1.6 ? 20 : fontScale >= 1.3 ? 18 : 15,
+        marginBottom: getHeaderMarginBottom(),
       }]}>
         <Text style={[styles.coursesTitle, {
-          fontSize: getResponsiveFontSize(18),
+          fontSize: getResponsiveFontSize(fontScale, 18),
         }]}
         numberOfLines={fontScale >= 1.6 ? 2 : 1}
         >Popular Course</Text>
         <TouchableOpacity onPress={() => navigation.navigate('AllCourses')}>
           <Text style={[styles.viewAllButton, {
-            fontSize: getResponsiveFontSize(15),
+            fontSize: getResponsiveFontSize(fontScale, 15),
           }]}>View All</Text>
         </TouchableOpacity>
       </View>
@@ -66,127 +195,12 @@ const PopularCourses: React.FC = () => {
       ) : (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.coursesSlider}>
           {courses.slice(0, 5).map((course) => (
-            <TouchableOpacity 
-              key={course.id} 
-              style={[styles.courseCard, {
-                width: fontScale >= 2.0 ? 220 : fontScale >= 1.6 ? 240 : fontScale >= 1.3 ? 260 : fontScale <= 0.85 ? 280 : 250,
-                marginRight: fontScale >= 1.6 ? 18 : 15,
-              }]}
+            <CourseCard
+              key={course.id}
+              course={course}
+              fontScale={fontScale}
               onPress={() => navigation.navigate('CourseDetails', { courseId: course.id, course })}
-            >
-              <View style={[styles.courseImageContainer, {
-                height: fontScale >= 2.0 ? 110 : fontScale >= 1.6 ? 120 : 130,
-                padding: fontScale >= 1.6 ? 10 : 8,
-              }]}>
-                <Image 
-                  source={course.imageUrl ? { uri: course.imageUrl } : require('../../assets/courses.png')} 
-                  style={styles.courseImage}
-                  resizeMode="cover"
-                />
-                <TouchableOpacity style={[styles.reactionButton, {
-                  top: fontScale >= 1.6 ? 20 : 18,
-                  right: fontScale >= 1.6 ? 20 : 18,
-                  padding: fontScale >= 1.6 ? 8 : 6,
-                }]}>
-                  <Image 
-                    source={require('../../assets/reaction.png')} 
-                    style={[styles.reactionIcon, {
-                      width: fontScale >= 1.6 ? 16 : 18,
-                      height: fontScale >= 1.6 ? 16 : 18,
-                    }]}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={[styles.courseInfo, {
-                padding: fontScale >= 1.6 ? 15 : 12,
-              }]}>
-                <Text style={[styles.courseTitle, {
-                  fontSize: getResponsiveFontSize(16),
-                  marginBottom: fontScale >= 1.6 ? 6 : 4,
-                }]}
-                numberOfLines={fontScale >= 1.6 ? 2 : 1}
-                >{course.name}</Text>
-                <Text style={[styles.courseSubtitle, {
-                  fontSize: getResponsiveFontSize(12),
-                  marginBottom: fontScale >= 1.6 ? 15 : 12,
-                }]}
-                numberOfLines={fontScale >= 1.6 ? 2 : 1}
-                >{course.totalLectures} Lectures ({course.totalDuration})</Text>
-                
-                <View style={[styles.detailsRow, {
-                  gap: fontScale >= 1.6 ? 10 : 8,
-                  flexDirection: fontScale >= 2.0 ? 'column' : 'row',
-                }]}>
-                  <View style={[styles.detailItemContainer, {
-                    paddingVertical: fontScale >= 1.6 ? 8 : 6,
-                    paddingHorizontal: fontScale >= 1.6 ? 10 : 8,
-                    flex: fontScale >= 2.0 ? 0 : 1,
-                    width: fontScale >= 2.0 ? '100%' : 'auto',
-                  }]}>
-                    <View style={[styles.durationContainer, {
-                      gap: fontScale >= 1.6 ? 3 : 2,
-                    }]}>
-                      <Image 
-                        source={require('../../assets/clock.png')} 
-                        style={[styles.clockIcon, {
-                          width: fontScale >= 1.6 ? 8 : 10,
-                          height: fontScale >= 1.6 ? 8 : 10,
-                        }]}
-                        resizeMode="contain"
-                      />
-                      <Text style={[styles.durationText, {
-                        fontSize: getResponsiveFontSize(10),
-                      }]}>{course.totalDuration}</Text>
-                    </View>
-                  </View>
-                  <View style={[styles.detailItemContainer, {
-                    paddingVertical: fontScale >= 1.6 ? 8 : 6,
-                    paddingHorizontal: fontScale >= 1.6 ? 10 : 8,
-                    flex: fontScale >= 2.0 ? 0 : 1,
-                    width: fontScale >= 2.0 ? '100%' : 'auto',
-                  }]}>
-                    <View style={[styles.priceContainer, {
-                      gap: fontScale >= 1.6 ? 3 : 2,
-                    }]}>
-                      <Image 
-                        source={require('../../assets/dollarforcourse.png')} 
-                        style={[styles.dollarCourseIcon, {
-                          width: fontScale >= 1.6 ? 8 : 10,
-                          height: fontScale >= 1.6 ? 8 : 10,
-                        }]}
-                        resizeMode="contain"
-                      />
-                      <Text style={[styles.priceText, {
-                        fontSize: getResponsiveFontSize(10),
-                      }]}>{course.discountPrice || course.price}</Text>
-                    </View>
-                  </View>
-                  <View style={[styles.ratingItemContainer, {
-                    paddingVertical: fontScale >= 1.6 ? 8 : 6,
-                    paddingHorizontal: fontScale >= 1.6 ? 10 : 8,
-                    flex: fontScale >= 2.0 ? 0 : 1,
-                    width: fontScale >= 2.0 ? '100%' : 'auto',
-                  }]}>
-                    <View style={[styles.ratingContainer, {
-                      gap: fontScale >= 1.6 ? 3 : 2,
-                    }]}>
-                      <Image 
-                        source={require('../../assets/imageforratingincoursecard.png')} 
-                        style={[styles.ratingIcon, {
-                          width: fontScale >= 1.6 ? 8 : 10,
-                          height: fontScale >= 1.6 ? 8 : 10,
-                        }]}
-                        resizeMode="contain"
-                      />
-                      <Text style={[styles.ratingText, {
-                        fontSize: getResponsiveFontSize(10),
-                      }]}>{getRating(course.averageRating)}</Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
+            />
           ))}
         </ScrollView>
       )}

@@ -29,9 +29,9 @@ const Speciality: React.FC<SpecialityProps> = ({
         style={styles.scrollView}
         contentContainerStyle={styles.specialitiesContainer}
       >
-        {specialities.map((speciality, index) => (
+        {specialities.map((speciality) => (
           <TouchableOpacity
-            key={index}
+            key={speciality}
             style={[
               styles.specialityButton,
               selectedSpeciality === speciality && styles.specialityButtonSelected

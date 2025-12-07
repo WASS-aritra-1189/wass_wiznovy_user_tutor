@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import ReviewCard from './ReviewCard';
-// import Calendar from './calender';
+
 
 interface Review {
   id: string;
@@ -56,17 +56,14 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  // const [showCalendar, setShowCalendar] = useState(false);
+  
 
   const handleContainerLayout = useCallback((event: any) => {
     const { width } = event.nativeEvent.layout;
     setContainerWidth(width);
   }, []);
 
-  const handleDateSelect = (date: Date) => {
-    console.log('Selected date:', date);
-    // You can filter reviews by date here if needed
-  };
+ 
 
   // Calculate total content width
   const totalContentWidth = (CARD_WIDTH + CARD_GAP) * reviews.length - CARD_GAP;
