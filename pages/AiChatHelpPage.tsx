@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  SafeAreaView,
   TextInput,
   KeyboardAvoidingView,
   Platform,
@@ -54,95 +53,77 @@ const AiChatHelpPage: React.FC = () => {
     return foundKeywords.length > 0 ? foundKeywords[0] : null;
   };
 
+  const createNoInfoMessage = (): Message => ({
+    id: (Date.now() + 1).toString(),
+    text: 'I don\'t have any information regarding your query. Please reach admin for more information.',
+    isUser: false,
+    timestamp: new Date(),
+  });
+
+  const buildResponseText = (totalResults: number, foundKeyword: string | null, userQuery: string, data: any) => {
+    let text = `I found ${totalResults} results for "${foundKeyword ?? userQuery}":\n\n`;
+    if (data.tutors?.total > 0) text += `📚 ${data.tutors.total} Tutors\n`;
+    if (data.courses?.total > 0) text += `🎓 ${data.courses.total} Courses\n`;
+    if (data.books?.total > 0) text += `📖 ${data.books.total} Books\n`;
+    if (data.subjects?.total > 0) text += `📝 ${data.subjects.total} Subjects\n`;
+    return text + '\nHow can I help you with these results?';
+  };
+
+  const handleSearchSuccess = (searchResult: any, foundKeyword: string | null, userQuery: string) => {
+    const { tutors, courses, books, subjects } = searchResult.data;
+    const totalResults = (tutors?.total || 0) + (courses?.total || 0) + (books?.total || 0) + (subjects?.total || 0);
+    
+    if (totalResults === 0) {
+      setMessages(prev => [...prev, createNoInfoMessage()]);
+      return;
+    }
+    
+    const textResponse: Message = {
+      id: (Date.now() + 1).toString(),
+      text: buildResponseText(totalResults, foundKeyword, userQuery, { tutors, courses, books, subjects }),
+      isUser: false,
+      timestamp: new Date(),
+      type: 'text',
+    };
+    
+    const cardsResponse: Message = {
+      id: (Date.now() + 2).toString(),
+      isUser: false,
+      timestamp: new Date(),
+      type: 'cards',
+      data: { tutors, courses, books, subjects },
+    };
+    
+    setMessages(prev => [...prev, textResponse, cardsResponse]);
+  };
+
   const handleSendMessage = async () => {
-    if (message.trim()) {
-      const userMessage: Message = {
-        id: Date.now().toString(),
-        text: message.trim(),
-        isUser: true,
-        timestamp: new Date(),
-      };
+    if (!message.trim()) return;
 
-      setMessages(prev => [...prev, userMessage]);
-      const userQuery = message.trim();
-      setMessage('');
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: message.trim(),
+      isUser: true,
+      timestamp: new Date(),
+    };
 
-      // Extract keyword and use it for search, fallback to full query
-      const foundKeyword = extractKeywords(userQuery);
-      const searchTerm = foundKeyword || userQuery;
-      
-      try {
-        const searchResult = await performGlobalSearch(searchTerm);
-        if (searchResult.success && searchResult.data) {
-          const { tutors, courses, books, subjects } = searchResult.data;
-          const totalResults = (tutors?.total || 0) + (courses?.total || 0) + (books?.total || 0) + (subjects?.total || 0);
-          
-          // If all data is 0, show admin message
-          if (totalResults === 0) {
-            const aiResponse: Message = {
-              id: (Date.now() + 1).toString(),
-              text: 'I don\'t have any information regarding your query. Please reach admin for more information.',
-              isUser: false,
-              timestamp: new Date(),
-            };
-            setMessages(prev => [...prev, aiResponse]);
-            return;
-          }
-          
-          // Build response text based on available data
-          let responseText = `I found ${totalResults} results for "${foundKeyword ? foundKeyword : userQuery}":\n\n`;
-          
-          if (tutors?.total > 0) {
-            responseText += `📚 ${tutors.total} Tutors\n`;
-          }
-          if (courses?.total > 0) {
-            responseText += `🎓 ${courses.total} Courses\n`;
-          }
-          if (books?.total > 0) {
-            responseText += `📖 ${books.total} Books\n`;
-          }
-          if (subjects?.total > 0) {
-            responseText += `📝 ${subjects.total} Subjects\n`;
-          }
-          
-          responseText += '\nHow can I help you with these results?';
-          
-          const textResponse: Message = {
-            id: (Date.now() + 1).toString(),
-            text: responseText,
-            isUser: false,
-            timestamp: new Date(),
-            type: 'text',
-          };
-          setMessages(prev => [...prev, textResponse]);
-          
-          // Add cards with conditional rendering
-          const cardsResponse: Message = {
-            id: (Date.now() + 2).toString(),
-            isUser: false,
-            timestamp: new Date(),
-            type: 'cards',
-            data: { tutors, courses, books, subjects },
-          };
-          setMessages(prev => [...prev, cardsResponse]);
-        } else {
-          const aiResponse: Message = {
-            id: (Date.now() + 1).toString(),
-            text: 'I don\'t have any information regarding your query. Please reach admin for more information.',
-            isUser: false,
-            timestamp: new Date(),
-          };
-          setMessages(prev => [...prev, aiResponse]);
-        }
-      } catch (error) {
-        const aiResponse: Message = {
-          id: (Date.now() + 1).toString(),
-          text: 'I don\'t have any information regarding your query. Please reach admin for more information.',
-          isUser: false,
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, aiResponse]);
+    setMessages(prev => [...prev, userMessage]);
+    const userQuery = message.trim();
+    setMessage('');
+
+    const foundKeyword = extractKeywords(userQuery);
+    const searchTerm = foundKeyword || userQuery;
+    
+    try {
+      const searchResult = await performGlobalSearch(searchTerm);
+      if (searchResult.success && searchResult.data) {
+        handleSearchSuccess(searchResult, foundKeyword, userQuery);
+      } else {
+        setMessages(prev => [...prev, createNoInfoMessage()]);
       }
+    } catch (error) {
+      console.error('Error performing search:', error);
+      setMessages(prev => [...prev, createNoInfoMessage()]);
     }
   };
 
@@ -151,7 +132,8 @@ const AiChatHelpPage: React.FC = () => {
     
     // Add tutor cards
     if (data.tutors?.result) {
-      data.tutors.result.slice(0, 5).forEach((tutor: any, index: number) => {
+      const tutors = data.tutors.result.slice(0, 5);
+      for (const [index, tutor] of tutors.entries()) {
         const teacher: Teacher = {
           id: String(tutor.id || index),
           name: String(tutor.name || 'Tutor'),
@@ -181,12 +163,13 @@ const AiChatHelpPage: React.FC = () => {
             }}
           />
         );
-      });
+      }
     }
     
     // Add course cards
     if (data.courses?.result) {
-      data.courses.result.slice(0, 5).forEach((course: any, index: number) => {
+      const courses = data.courses.result.slice(0, 5);
+      for (const [index, course] of courses.entries()) {
         allCards.push(
           <CourseCard 
             key={`course-${index}`}
@@ -200,12 +183,13 @@ const AiChatHelpPage: React.FC = () => {
             rating={course.rating || '0'}
           />
         );
-      });
+      }
     }
     
     // Add book cards
     if (data.books?.result && data.books.result.length > 0) {
-      data.books.result.slice(0, 5).forEach((book: any, index: number) => {
+      const books = data.books.result.slice(0, 5);
+      for (const [index, book] of books.entries()) {
         allCards.push(
           <BookCard 
             key={`book-${index}`}
@@ -214,12 +198,13 @@ const AiChatHelpPage: React.FC = () => {
             description={book.description || book.summary || 'Book description'}
           />
         );
-      });
+      }
     }
     
     // Add subject cards
     if (data.subjects?.result && data.subjects.result.length > 0) {
-      data.subjects.result.slice(0, 5).forEach((subject: any, index: number) => {
+      const subjects = data.subjects.result.slice(0, 5);
+      for (const [index, subject] of subjects.entries()) {
         allCards.push(
           <SubjectCard 
             key={`subject-${index}`}
@@ -228,7 +213,7 @@ const AiChatHelpPage: React.FC = () => {
             image={subject.image}
           />
         );
-      });
+      }
     }
     
     return (
@@ -294,7 +279,7 @@ const AiChatHelpPage: React.FC = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardContainer}
       >
-        <SafeAreaView style={styles.safeArea}>
+        <View style={[styles.safeArea, { paddingTop: insets.top }]}>
           {/* Chat Messages */}
           <ScrollView
             ref={scrollViewRef}
@@ -338,7 +323,7 @@ const AiChatHelpPage: React.FC = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </SafeAreaView>
+        </View>
       </KeyboardAvoidingView>
     </LinearGradient>
   );
