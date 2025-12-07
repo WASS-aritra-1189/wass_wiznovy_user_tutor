@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "wiznovy",
+    "slug": "wiznovy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/Wiznovy_logo.png",
+    "scheme": "wiznovy",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/Wiznovy_logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#16423C"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.wiznovy"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/Wiznovy_logo.png",
+        "backgroundColor": "#16423C"
+      },
+      "icon": "./assets/applogo.png",
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.yourcompany.wiznovy"
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-video"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "51cf2d12-fc5f-4db2-b773-70eda7606316"
+      }
+    },
+    "owner": "aritra1189"
+  }
+}
