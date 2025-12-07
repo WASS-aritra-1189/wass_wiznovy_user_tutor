@@ -45,14 +45,102 @@ const TutorRecommendation: React.FC = () => {
     dispatch(fetchTutors());
   }, [dispatch]);
 
+  const getHeaderMarginBottom = () => {
+    if (fontScale >= 1.6) return 20;
+    if (fontScale >= 1.3) return 18;
+    return 15;
+  };
+
+  const getOnlineDotSize = () => {
+    if (fontScale >= 2) return 8;
+    if (fontScale >= 1.6) return 9;
+    return 12;
+  };
+
+  const getOnlineDotBorderRadius = () => {
+    if (fontScale >= 2) return 4;
+    if (fontScale >= 1.6) return 4.5;
+    return 6;
+  };
+
+  const getTutorNameMarginBottom = () => {
+    if (fontScale >= 2) return 8;
+    if (fontScale >= 1.6) return 6;
+    if (fontScale >= 1.3) return 4;
+    return 2;
+  };
+
+  const getSmallGap = () => {
+    if (fontScale >= 2) return 6;
+    if (fontScale >= 1.6) return 5;
+    return 4;
+  };
+
+  const getBadgeSize = () => {
+    if (fontScale >= 2) return 10;
+    if (fontScale >= 1.6) return 12;
+    return 16;
+  };
+
+  const getElementMarginBottom = () => {
+    if (fontScale >= 2) return 10;
+    if (fontScale >= 1.6) return 8;
+    if (fontScale >= 1.3) return 6;
+    return 4;
+  };
+
+  const getRatingRowGap = () => {
+    if (fontScale >= 2) return 8;
+    if (fontScale >= 1.6) return 6;
+    return 6;
+  };
+
+  const getLargePaddingHorizontal = () => {
+    if (fontScale >= 2) return 12;
+    if (fontScale >= 1.6) return 10;
+    return 8;
+  };
+
+  const getSmallPaddingHorizontal = () => {
+    if (fontScale >= 2) return 8;
+    if (fontScale >= 1.6) return 7;
+    return 6;
+  };
+
+  const getMediumPadding = () => {
+    if (fontScale >= 2) return 6;
+    if (fontScale >= 1.6) return 5;
+    return 4;
+  };
+
+  const getContainerGap = () => {
+    if (fontScale >= 2) return 4;
+    if (fontScale >= 1.6) return 3;
+    return 2;
+  };
+
+  const getDollarIconSize = () => {
+    if (fontScale >= 2) return 6;
+    if (fontScale >= 1.6) return 7;
+    return 8;
+  };
+
+  const getTuitionTypePaddingVertical = () => {
+    if (fontScale >= 2) return 3;
+    if (fontScale >= 1.6) return 2.5;
+    return 2;
+  };
+
+  const getFlexDirection = () => fontScale >= 1.6 ? 'column' : 'row';
+  const getAlignment = () => fontScale >= 1.6 ? 'center' : 'flex-start';
+  const getTextAlign = () => fontScale >= 1.6 ? 'center' : 'left';
+  const getJustifyContent = () => fontScale >= 1.6 ? 'center' : 'flex-start';
+  const getFlexWrap = () => fontScale >= 2 ? 'wrap' : 'nowrap';
+
   return (
     <View style={styles.recommendationContainer}>
       <View style={[styles.recommendationHeader, {
-        marginBottom: (() => {
-          if (fontScale >= 1.6) return 20;
-          if (fontScale >= 1.3) return 18;
-          return 15;
-        })(),
+        marginBottom: getHeaderMarginBottom(),
       }]}>
         <Text style={[styles.recommendationTitle, {
           fontSize: getResponsiveFontSize(18, fontScale),
@@ -84,14 +172,14 @@ const TutorRecommendation: React.FC = () => {
               }}
             >
               <View style={[styles.tutorContent, {
-                flexDirection: fontScale >= 1.6 ? 'column' : 'row',
+                flexDirection: getFlexDirection(),
                 alignItems: 'center',
                 height: '100%',
               }]}>
                 <View style={[styles.tutorImageContainer, {
                   marginRight: fontScale >= 1.6 ? 0 : 12,
                   marginBottom: fontScale >= 1.6 ? 12 : 0,
-                  alignSelf: fontScale >= 1.6 ? 'center' : 'flex-start',
+                  alignSelf: getAlignment(),
                 }]}>
                   <Image 
                     source={tutor.profileImage ? { uri: tutor.profileImage } : require('../../assets/tutor.png')} 
@@ -103,124 +191,61 @@ const TutorRecommendation: React.FC = () => {
                     resizeMode="cover"
                   />
                   <View style={[styles.onlineDot, {
-                    width: (() => {
-                      if (fontScale >= 2) return 8;
-                      if (fontScale >= 1.6) return 9;
-                      return 12;
-                    })(),
-                    height: (() => {
-                      if (fontScale >= 2) return 8;
-                      if (fontScale >= 1.6) return 9;
-                      return 12;
-                    })(),
-                    borderRadius: (() => {
-                      if (fontScale >= 2) return 4;
-                      if (fontScale >= 1.6) return 4.5;
-                      return 6;
-                    })(),
+                    width: getOnlineDotSize(),
+                    height: getOnlineDotSize(),
+                    borderRadius: getOnlineDotBorderRadius(),
                   }]} />
                 </View>
                 <View style={[styles.tutorInfo, {
                   flex: 1,
-                  alignItems: fontScale >= 1.6 ? 'center' : 'flex-start',
+                  alignItems: getAlignment(),
                   width: fontScale >= 1.6 ? '100%' : 'auto',
                 }]}>
                   <View style={[styles.tutorNameRow, {
-                    marginBottom: (() => {
-                      if (fontScale >= 2) return 8;
-                      if (fontScale >= 1.6) return 6;
-                      if (fontScale >= 1.3) return 4;
-                      return 2;
-                    })(),
-                    gap: (() => {
-                      if (fontScale >= 2) return 6;
-                      if (fontScale >= 1.6) return 5;
-                      return 4;
-                    })(),
-                    justifyContent: fontScale >= 1.6 ? 'center' : 'flex-start',
+                    marginBottom: getTutorNameMarginBottom(),
+                    gap: getSmallGap(),
+                    justifyContent: getJustifyContent(),
                   }]}>
                     <Text style={[styles.tutorName, {
                       fontSize: getResponsiveFontSize(12, fontScale),
-                      textAlign: fontScale >= 1.6 ? 'center' : 'left',
+                      textAlign: getTextAlign(),
                     }]}
                     numberOfLines={fontScale >= 1.3 ? 2 : 1}
                     >{tutor.name}</Text>
                     <Image 
                       source={require('../../assets/tutor badge.png')} 
                       style={[styles.tutorBadge, {
-                        width: (() => {
-                          if (fontScale >= 2) return 10;
-                          if (fontScale >= 1.6) return 12;
-                          return 16;
-                        })(),
-                        height: (() => {
-                          if (fontScale >= 2) return 10;
-                          if (fontScale >= 1.6) return 12;
-                          return 16;
-                        })(),
+                        width: getBadgeSize(),
+                        height: getBadgeSize(),
                       }]}
                       resizeMode="contain"
                     />
                   </View>
                   <Text style={[styles.tutorSubject, {
                     fontSize: getResponsiveFontSize(10, fontScale),
-                    marginBottom: (() => {
-                      if (fontScale >= 2) return 10;
-                      if (fontScale >= 1.6) return 8;
-                      if (fontScale >= 1.3) return 6;
-                      return 4;
-                    })(),
-                    textAlign: fontScale >= 1.6 ? 'center' : 'left',
+                    marginBottom: getElementMarginBottom(),
+                    textAlign: getTextAlign(),
                     width: fontScale >= 1.6 ? '100%' : 'auto',
                   }]}
                   numberOfLines={fontScale >= 1.3 ? 3 : 1}
                   >Specialized in: {tutor.subject?.name || 'General'}</Text>
                   
                   <View style={[styles.ratingSessionRow, {
-                    marginBottom: (() => {
-                      if (fontScale >= 2) return 10;
-                      if (fontScale >= 1.6) return 8;
-                      if (fontScale >= 1.3) return 6;
-                      return 4;
-                    })(),
-                    gap: (() => {
-                      if (fontScale >= 2) return 8;
-                      if (fontScale >= 1.6) return 6;
-                      return 6;
-                    })(),
-                    justifyContent: fontScale >= 1.6 ? 'center' : 'flex-start',
-                    flexWrap: fontScale >= 2 ? 'wrap' : 'nowrap',
+                    marginBottom: getElementMarginBottom(),
+                    gap: getRatingRowGap(),
+                    justifyContent: getJustifyContent(),
+                    flexWrap: getFlexWrap(),
                   }]}>
                     <View style={[styles.sessionContainer, {
-                      paddingHorizontal: (() => {
-                        if (fontScale >= 2) return 12;
-                        if (fontScale >= 1.6) return 10;
-                        return 8;
-                      })(),
-                      paddingVertical: (() => {
-                        if (fontScale >= 2) return 6;
-                        if (fontScale >= 1.6) return 5;
-                        return 4;
-                      })(),
-                      gap: (() => {
-                        if (fontScale >= 2) return 4;
-                        if (fontScale >= 1.6) return 3;
-                        return 2;
-                      })(),
+                      paddingHorizontal: getLargePaddingHorizontal(),
+                      paddingVertical: getMediumPadding(),
+                      gap: getContainerGap(),
                     }]}>
                       <Image 
                         source={require('../../assets/dollar.png')} 
                         style={[styles.dollarIcon, {
-                          width: (() => {
-                            if (fontScale >= 2) return 6;
-                            if (fontScale >= 1.6) return 7;
-                            return 8;
-                          })(),
-                          height: (() => {
-                            if (fontScale >= 2) return 6;
-                            if (fontScale >= 1.6) return 7;
-                            return 8;
-                          })(),
+                          width: getDollarIconSize(),
+                          height: getDollarIconSize(),
                         }]}
                         resizeMode="contain"
                       />
@@ -229,16 +254,8 @@ const TutorRecommendation: React.FC = () => {
                       }]}>${tutor.hourlyRate}/hr</Text>
                     </View>
                     <View style={[styles.ratingContainer, {
-                      paddingHorizontal: (() => {
-                        if (fontScale >= 2) return 12;
-                        if (fontScale >= 1.6) return 10;
-                        return 8;
-                      })(),
-                      paddingVertical: (() => {
-                        if (fontScale >= 2) return 6;
-                        if (fontScale >= 1.6) return 5;
-                        return 4;
-                      })(),
+                      paddingHorizontal: getLargePaddingHorizontal(),
+                      paddingVertical: getMediumPadding(),
                     }]}>
                       <Text style={[styles.ratingText, {
                         fontSize: getResponsiveFontSize(8, fontScale),
@@ -247,25 +264,13 @@ const TutorRecommendation: React.FC = () => {
                   </View>
 
                   <View style={[styles.tuitionTypeRow, {
-                    gap: (() => {
-                      if (fontScale >= 2) return 6;
-                      if (fontScale >= 1.6) return 5;
-                      return 4;
-                    })(),
-                    justifyContent: fontScale >= 1.6 ? 'center' : 'flex-start',
-                    flexWrap: fontScale >= 2 ? 'wrap' : 'nowrap',
+                    gap: getSmallGap(),
+                    justifyContent: getJustifyContent(),
+                    flexWrap: getFlexWrap(),
                   }]}>
                     <View style={[styles.tuitionType, {
-                      paddingHorizontal: (() => {
-                        if (fontScale >= 2) return 8;
-                        if (fontScale >= 1.6) return 7;
-                        return 6;
-                      })(),
-                      paddingVertical: (() => {
-                        if (fontScale >= 2) return 3;
-                        if (fontScale >= 1.6) return 2.5;
-                        return 2;
-                      })(),
+                      paddingHorizontal: getSmallPaddingHorizontal(),
+                      paddingVertical: getTuitionTypePaddingVertical(),
                     }]}>
                       <Text style={[styles.tuitionTypeText, {
                         fontSize: getResponsiveFontSize(8, fontScale),
@@ -274,16 +279,8 @@ const TutorRecommendation: React.FC = () => {
                       >Group</Text>
                     </View>
                     <View style={[styles.tuitionType, {
-                      paddingHorizontal: (() => {
-                        if (fontScale >= 2) return 8;
-                        if (fontScale >= 1.6) return 7;
-                        return 6;
-                      })(),
-                      paddingVertical: (() => {
-                        if (fontScale >= 2) return 3;
-                        if (fontScale >= 1.6) return 2.5;
-                        return 2;
-                      })(),
+                      paddingHorizontal: getSmallPaddingHorizontal(),
+                      paddingVertical: getTuitionTypePaddingVertical(),
                     }]}>
                       <Text style={[styles.tuitionTypeText, {
                         fontSize: getResponsiveFontSize(8, fontScale),

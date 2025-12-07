@@ -351,16 +351,33 @@ export const getRatingCounts = async (): Promise<SearchResponse> => {
   }
 };
 
+const appendArrayParam = (params: URLSearchParams, key: string, value: any) => {
+  if (value && value.length > 0) {
+    params.append(key, Array.isArray(value) ? value.join(',') : value);
+  }
+};
+
+const appendPriceParam = (params: URLSearchParams, key: string, value: any) => {
+  if (value !== undefined && value !== null) {
+    params.append(key, value.toString());
+  }
+};
+
+const buildSearchParams = (filters: any): URLSearchParams => {
+  const params = new URLSearchParams();
+  params.append('keyword', filters.keyword.trim());
+  appendArrayParam(params, 'country', filters.countries);
+  appendArrayParam(params, 'subject', filters.subjects);
+  appendArrayParam(params, 'level', filters.expertiseLevels);
+  appendArrayParam(params, 'rating', filters.ratings);
+  appendPriceParam(params, 'minPrice', filters.minPrice);
+  appendPriceParam(params, 'maxPrice', filters.maxPrice);
+  return params;
+};
+
 export const performFilteredSearch = async (filters: any) => {
   try {
-    const baseUrl = `${API_BASE_URL}/global-search`;
-    const params = new URLSearchParams();
-    
-    // Required keyword parameter from search input
-    if (filters.keyword && filters.keyword.trim() !== '') {
-      params.append('keyword', filters.keyword.trim());
-    } else {
-      // If no keyword provided, return empty results or handle as needed
+    if (!filters.keyword || filters.keyword.trim() === '') {
       console.warn('No keyword provided for filtered search');
       return {
         success: true,
@@ -368,33 +385,9 @@ export const performFilteredSearch = async (filters: any) => {
         data: []
       };
     }
-    
-    // Optional filter parameters
-    if (filters.countries && filters.countries.length > 0) {
-      params.append('country', Array.isArray(filters.countries) ? filters.countries.join(',') : filters.countries);
-    }
-    
-    if (filters.subjects && filters.subjects.length > 0) {
-      params.append('subject', Array.isArray(filters.subjects) ? filters.subjects.join(',') : filters.subjects);
-    }
-    
-    if (filters.expertiseLevels && filters.expertiseLevels.length > 0) {
-      params.append('level', Array.isArray(filters.expertiseLevels) ? filters.expertiseLevels.join(',') : filters.expertiseLevels);
-    }
-    
-    if (filters.ratings && filters.ratings.length > 0) {
-      params.append('rating', Array.isArray(filters.ratings) ? filters.ratings.join(',') : filters.ratings);
-    }
-    
-    if (filters.minPrice !== undefined && filters.minPrice !== null) {
-      params.append('minPrice', filters.minPrice.toString());
-    }
-    
-    if (filters.maxPrice !== undefined && filters.maxPrice !== null) {
-      params.append('maxPrice', filters.maxPrice.toString());
-    }
-    
-    const url = `${baseUrl}?${params.toString()}`;
+
+    const params = buildSearchParams(filters);
+    const url = `${API_BASE_URL}/global-search?${params.toString()}`;
     console.log('🔍 Filter API URL:', url);
     
     const token = await getToken();

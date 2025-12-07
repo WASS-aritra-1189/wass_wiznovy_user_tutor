@@ -36,7 +36,7 @@ const AuthScreen: React.FC = () => {
   const getResponsiveFontSize = (baseSize: number) => {
     const scale = isTablet ? 1.2 : 1;
     
-    if (fontScale >= 2.0) return Math.max(baseSize * 0.5 * scale, 11);
+    if (fontScale >= 2) return Math.max(baseSize * 0.5 * scale, 11);
     if (fontScale >= 1.6) return Math.max(baseSize * 0.65 * scale, 12);
     if (fontScale >= 1.3) return Math.max(baseSize * 0.8 * scale, 13);
     if (fontScale <= 0.85) return Math.min(baseSize * 1.2 * scale, baseSize + 4);
@@ -105,6 +105,49 @@ const AuthScreen: React.FC = () => {
     navigation.navigate('SignUp');
   };
 
+  const getPaddingTop = () => {
+    if (isVerySmallDevice) return 10;
+    if (isSmallDevice) return 15;
+    return 20;
+  };
+
+  const getImageMarginTop = () => {
+    if (isVerySmallDevice) return -15;
+    if (isSmallDevice) return -20;
+    return -25;
+  };
+
+  const getBaseFontSize = () => {
+    if (isVerySmallDevice) return 16;
+    if (isTablet) return 24;
+    return 20;
+  };
+
+  const getBaseLineHeight = () => {
+    if (isVerySmallDevice) return 20;
+    if (isTablet) return 28;
+    return 24;
+  };
+
+  const getNumberOfLines = () => {
+    if (isVerySmallDevice) return 3;
+    if (isSmallDevice) return 4;
+    if (isLargeDevice) return 5;
+    return 4;
+  };
+
+  const getButtonHeight = () => {
+    if (isVerySmallDevice) return 42;
+    if (isTablet) return 56;
+    return 48;
+  };
+
+  const getButtonFontSize = () => {
+    if (isVerySmallDevice) return 14;
+    if (isTablet) return 18;
+    return 16;
+  };
+
   return (
     <SafeAreaWrapper>
       <View style={styles.container}>
@@ -112,7 +155,7 @@ const AuthScreen: React.FC = () => {
         
         <View style={[styles.content, {
           paddingHorizontal: isTablet ? 40 : 20,
-          paddingTop: isVerySmallDevice ? 10 : isSmallDevice ? 15 : 20,
+          paddingTop: getPaddingTop(),
           paddingBottom: isVerySmallDevice ? 10 : 15,
           height: availableHeight,
         }]}>
@@ -124,7 +167,6 @@ const AuthScreen: React.FC = () => {
             <View style={[styles.topRow, {
               height: imageHeights.topRowHeight,
               gap: isVerySmallDevice ? 5 : 8,
-              flexDirection: isLandscape && !isTablet ? 'row' : 'row',
             }]}>
               <View style={[styles.leftHalf, {
                 flex: isLandscape && !isTablet ? 1.2 : 1,
@@ -137,7 +179,7 @@ const AuthScreen: React.FC = () => {
               </View>
               
               <View style={[styles.rightHalf, {
-                flex: isLandscape && !isTablet ? 1 : 1,
+                flex: 1,
                 gap: isVerySmallDevice ? 5 : 8,
               }]}>
                 <View style={styles.topRightImage}>
@@ -145,7 +187,7 @@ const AuthScreen: React.FC = () => {
                     source={require('../assets/signinup_top_leftup.png')}
                     style={[styles.faceImageStyle, {
                       height: imageHeights.topRowHeight * 1.3,
-                      marginTop: isVerySmallDevice ? -15 : isSmallDevice ? -20 : -25,
+                      marginTop: getImageMarginTop(),
                     }]}
                     resizeMode="cover"
                   />
@@ -178,10 +220,10 @@ const AuthScreen: React.FC = () => {
             flex: 0.2, // Takes 20% of available space
           }]}>
             <Text style={[styles.loremText, {
-              fontSize: getResponsiveFontSize(isVerySmallDevice ? 16 : isTablet ? 24 : 20),
-              lineHeight: getResponsiveFontSize(isVerySmallDevice ? 20 : isTablet ? 28 : 24) * 1.3,
+              fontSize: getResponsiveFontSize(getBaseFontSize()),
+              lineHeight: getResponsiveFontSize(getBaseLineHeight()) * 1.3,
             }]}
-            numberOfLines={isVerySmallDevice ? 3 : isSmallDevice ? 4 : isLargeDevice ? 5 : 4}
+            numberOfLines={getNumberOfLines()}
             adjustsFontSizeToFit
             minimumFontScale={0.7}
             >
@@ -192,7 +234,6 @@ const AuthScreen: React.FC = () => {
           {/* Buttons Section */}
           <View style={[styles.buttonSection, {
             flex: 0.15, // Takes 15% of available space
-            flexDirection: isVerySmallDevice || (isLandscape && !isTablet) ? 'row' : 'row',
             gap: isVerySmallDevice ? 8 : 12,
             marginTop: 'auto',
           }]}>
@@ -200,26 +241,26 @@ const AuthScreen: React.FC = () => {
               title="Sign in"
               onPress={handleSignIn}
               variant="primary"
-              style={[styles.button, {
-                height: isVerySmallDevice ? 42 : isTablet ? 56 : 48,
+              style={StyleSheet.flatten([styles.button, {
+                height: getButtonHeight(),
                 flex: 1,
-              }]}
-              textStyle={[styles.buttonText, {
-                fontSize: getResponsiveFontSize(isVerySmallDevice ? 14 : isTablet ? 18 : 16),
-              }]}
+              }])}
+              textStyle={StyleSheet.flatten([styles.buttonText, {
+                fontSize: getResponsiveFontSize(getButtonFontSize()),
+              }])}
             />
             
             <Button
               title="Sign up"
               onPress={handleSignUp}
               variant="primary"
-              style={[styles.signUpButton, {
-                height: isVerySmallDevice ? 42 : isTablet ? 56 : 48,
+              style={StyleSheet.flatten([styles.signUpButton, {
+                height: getButtonHeight(),
                 flex: 1,
-              }]}
-              textStyle={[styles.signUpText, {
-                fontSize: getResponsiveFontSize(isVerySmallDevice ? 14 : isTablet ? 18 : 16),
-              }]}
+              }])}
+              textStyle={StyleSheet.flatten([styles.signUpText, {
+                fontSize: getResponsiveFontSize(getButtonFontSize()),
+              }])}
             />
           </View>
         </View>

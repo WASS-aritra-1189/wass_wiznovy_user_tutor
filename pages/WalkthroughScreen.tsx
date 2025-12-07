@@ -59,7 +59,7 @@ const Slide: React.FC<SlideProps> = ({ item, slides }) => {
   const fontScale = PixelRatio.getFontScale();
   
   const getResponsiveFontSize = (baseSize: number) => {
-    if (fontScale >= 2.0) return Math.max(baseSize * 0.5, 12);
+    if (fontScale >= 2) return Math.max(baseSize * 0.5, 12);
     if (fontScale >= 1.6) return Math.max(baseSize * 0.65, 14);
     if (fontScale >= 1.3) return Math.max(baseSize * 0.8, 16);
     if (fontScale <= 0.85) return Math.min(baseSize * 1.2, baseSize + 4);
@@ -79,22 +79,77 @@ const Slide: React.FC<SlideProps> = ({ item, slides }) => {
     return defaultImages[index] || slide1Image;
   };
 
+  const getTitleMarginBottom = () => {
+    if (fontScale >= 2) return 8;
+    if (fontScale >= 1.6) return 10;
+    if (fontScale >= 1.3) return 12;
+    if (fontScale <= 0.85) return 18;
+    return 15;
+  };
+
+  const getTitleMarginTop = () => {
+    if (fontScale >= 2) return 10;
+    if (fontScale >= 1.6) return 12;
+    if (fontScale >= 1.3) return 15;
+    if (fontScale <= 0.85) return 25;
+    return 20;
+  };
+
+  const getSubtitleMarginBottom = () => {
+    if (fontScale >= 2) return 15;
+    if (fontScale >= 1.6) return 18;
+    if (fontScale >= 1.3) return 20;
+    if (fontScale <= 0.85) return 25;
+    return 20;
+  };
+
+  const getImageHeight = () => {
+    if (fontScale >= 2) return height * 0.35;
+    if (fontScale >= 1.6) return height * 0.4;
+    if (fontScale >= 1.3) return height * 0.45;
+    if (fontScale <= 0.85) return height * 0.65;
+    return height * 0.6;
+  };
+
+  const getImageMarginBottom = () => {
+    if (fontScale >= 2) return 8;
+    if (fontScale >= 1.6) return 10;
+    if (fontScale >= 1.3) return 12;
+    if (fontScale <= 0.85) return 35;
+    return 30;
+  };
+
+  const getTitleNumberOfLines = () => {
+    if (fontScale >= 2) return 5;
+    if (fontScale >= 1.6) return 4;
+    if (fontScale >= 1.3) return 3;
+    return 1;
+  };
+
+  const getSubtitleNumberOfLines = () => {
+    if (fontScale >= 2) return 10;
+    if (fontScale >= 1.6) return 8;
+    if (fontScale >= 1.3) return 6;
+    if (fontScale <= 0.85) return 2;
+    return 4;
+  };
+
   const titleStyle = {
     fontSize: getResponsiveFontSize(24),
     lineHeight: getResponsiveFontSize(26),
-    marginBottom: fontScale >= 2.0 ? 8 : fontScale >= 1.6 ? 10 : fontScale >= 1.3 ? 12 : fontScale <= 0.85 ? 18 : 15,
-    marginTop: fontScale >= 2.0 ? 10 : fontScale >= 1.6 ? 12 : fontScale >= 1.3 ? 15 : fontScale <= 0.85 ? 25 : 20,
+    marginBottom: getTitleMarginBottom(),
+    marginTop: getTitleMarginTop(),
   };
 
   const subtitleStyle = {
     fontSize: getResponsiveFontSize(14),
     lineHeight: getResponsiveFontSize(18),
-    marginBottom: fontScale >= 2.0 ? 15 : fontScale >= 1.6 ? 18 : fontScale >= 1.3 ? 20 : fontScale <= 0.85 ? 25 : 20,
+    marginBottom: getSubtitleMarginBottom(),
   };
 
   const imageContainerStyle = {
-    height: fontScale >= 2.0 ? height * 0.35 : fontScale >= 1.6 ? height * 0.4 : fontScale >= 1.3 ? height * 0.45 : fontScale <= 0.85 ? height * 0.65 : height * 0.6,
-    marginBottom: fontScale >= 2.0 ? 8 : fontScale >= 1.6 ? 10 : fontScale >= 1.3 ? 12 : fontScale <= 0.85 ? 35 : 30,
+    height: getImageHeight(),
+    marginBottom: getImageMarginBottom(),
   };
 
   return (
@@ -110,14 +165,14 @@ const Slide: React.FC<SlideProps> = ({ item, slides }) => {
       <View style={styles.textContainer}>
         <Text 
           style={[styles.title, titleStyle]}
-          numberOfLines={fontScale >= 2.0 ? 5 : fontScale >= 1.6 ? 4 : fontScale >= 1.3 ? 3 : 1}
+          numberOfLines={getTitleNumberOfLines()}
         >
           {item.title || 'Walkthrough Screen'}
         </Text>
         
         <Text 
           style={[styles.mainDescription, subtitleStyle]}
-          numberOfLines={fontScale >= 2.0 ? 10 : fontScale >= 1.6 ? 8 : fontScale >= 1.3 ? 6 : fontScale <= 0.85 ? 2 : 4}
+          numberOfLines={getSubtitleNumberOfLines()}
         >
           {item.subtitle || 'Learn how to use this feature'}
         </Text>
@@ -129,10 +184,10 @@ const Slide: React.FC<SlideProps> = ({ item, slides }) => {
 const Footer: React.FC<FooterProps> = ({ slides, currentSlide, handleSkip, goToNextSlide }) => {
   const fontScale = PixelRatio.getFontScale();
   const isLargeFontScale = fontScale >= 1.3;
-  const isExtraLargeFontScale = fontScale >= 1.6;
+  
   
   const getResponsiveFontSize = (baseSize: number) => {
-    if (fontScale >= 2.0) return Math.max(baseSize * 0.5, 11);
+    if (fontScale >= 2) return Math.max(baseSize * 0.5, 11);
     if (fontScale >= 1.6) return Math.max(baseSize * 0.65, 12);
     if (fontScale >= 1.3) return Math.max(baseSize * 0.8, 13);
     if (fontScale <= 0.85) return Math.min(baseSize * 1.2, baseSize + 4);
@@ -140,10 +195,86 @@ const Footer: React.FC<FooterProps> = ({ slides, currentSlide, handleSkip, goToN
     return baseSize;
   };
 
+  const getSkipPaddingVertical = () => {
+    if (fontScale >= 1.6) return 6;
+    if (fontScale >= 1.3) return 8;
+    return 12;
+  };
+
+  const getSkipPaddingHorizontal = () => {
+    if (fontScale >= 1.6) return 4;
+    if (fontScale >= 1.3) return 6;
+    return isSmallScreen ? 8 : 16;
+  };
+
+  const getSkipMinWidth = () => {
+    if (fontScale >= 1.6) return 45;
+    if (fontScale >= 1.3) return 50;
+    return isSmallScreen ? 60 : 80;
+  };
+
+  const getNextPaddingVertical = () => {
+    if (fontScale >= 2) return 8;
+    if (fontScale >= 1.6) return 10;
+    if (fontScale >= 1.3) return 12;
+    return 12;
+  };
+
+  const getNextPaddingHorizontal = () => {
+    if (fontScale >= 2) return 12;
+    if (fontScale >= 1.6) return 14;
+    if (fontScale >= 1.3) return 16;
+    return isSmallScreen ? 16 : 24;
+  };
+
+  const getNextMinWidth = () => {
+    if (fontScale >= 2) return 80;
+    if (fontScale >= 1.6) return 90;
+    if (fontScale >= 1.3) return 100;
+    return isSmallScreen ? 100 : 120;
+  };
+
+  const getNextMaxWidth = () => {
+    if (fontScale >= 2) return 150;
+    if (fontScale >= 1.6) return 160;
+    if (fontScale >= 1.3) return 170;
+    return isLargeScreen ? 200 : undefined;
+  };
+
+  const getNextMinHeight = () => {
+    if (fontScale >= 2) return 40;
+    if (fontScale >= 1.6) return 44;
+    if (fontScale >= 1.3) return 48;
+    return undefined;
+  };
+
+  const getBottomFlexDirection = () => fontScale >= 1.6 ? 'column' : 'row';
+  const getBottomJustifyContent = () => fontScale >= 1.6 ? 'center' : 'space-between';
+
+  const getBottomMinHeight = () => {
+    if (fontScale >= 2) return 100;
+    if (fontScale >= 1.6) return 90;
+    if (fontScale >= 1.3) return 70;
+    return 48;
+  };
+
+  const getBottomGap = () => {
+    if (fontScale >= 2) return 16;
+    if (fontScale >= 1.6) return 14;
+    if (fontScale >= 1.3) return 12;
+    return 8;
+  };
+
+  const getBottomPaddingVertical = () => {
+    if (fontScale >= 2) return 8;
+    if (fontScale >= 1.6) return 6;
+    return 4;
+  };
+
   const skipButtonStyle = {
-    paddingVertical: fontScale >= 1.6 ? 6 : fontScale >= 1.3 ? 8 : 12,
-    paddingHorizontal: fontScale >= 1.6 ? 4 : fontScale >= 1.3 ? 6 : (isSmallScreen ? 8 : 16),
-    minWidth: fontScale >= 1.6 ? 45 : fontScale >= 1.3 ? 50 : (isSmallScreen ? 60 : 80),
+    paddingVertical: getSkipPaddingVertical(),
+    paddingHorizontal: getSkipPaddingHorizontal(),
+    minWidth: getSkipMinWidth(),
   };
 
   const skipTextStyle = {
@@ -151,12 +282,12 @@ const Footer: React.FC<FooterProps> = ({ slides, currentSlide, handleSkip, goToN
   };
 
   const nextButtonStyle = {
-    paddingVertical: fontScale >= 2.0 ? 8 : fontScale >= 1.6 ? 10 : fontScale >= 1.3 ? 12 : 12,
-    paddingHorizontal: fontScale >= 2.0 ? 12 : fontScale >= 1.6 ? 14 : fontScale >= 1.3 ? 16 : (isSmallScreen ? 16 : 24),
-    minWidth: fontScale >= 2.0 ? 80 : fontScale >= 1.6 ? 90 : fontScale >= 1.3 ? 100 : (isSmallScreen ? 100 : 120),
+    paddingVertical: getNextPaddingVertical(),
+    paddingHorizontal: getNextPaddingHorizontal(),
+    minWidth: getNextMinWidth(),
     flex: (isSmallScreen || isLargeFontScale) ? 1 : 0,
-    maxWidth: fontScale >= 2.0 ? 150 : fontScale >= 1.6 ? 160 : fontScale >= 1.3 ? 170 : (isLargeScreen ? 200 : undefined),
-    minHeight: fontScale >= 2.0 ? 40 : fontScale >= 1.6 ? 44 : fontScale >= 1.3 ? 48 : undefined,
+    maxWidth: getNextMaxWidth(),
+    minHeight: getNextMinHeight(),
   };
 
   const nextTextStyle = {
@@ -183,11 +314,11 @@ const Footer: React.FC<FooterProps> = ({ slides, currentSlide, handleSkip, goToN
 
       {/* Bottom Section */}
       <View style={[styles.bottomSection, {
-        flexDirection: fontScale >= 1.6 ? 'column' : 'row',
-        justifyContent: fontScale >= 1.6 ? 'center' : 'space-between',
-        minHeight: fontScale >= 2.0 ? 100 : fontScale >= 1.6 ? 90 : fontScale >= 1.3 ? 70 : 48,
-        gap: fontScale >= 2.0 ? 16 : fontScale >= 1.6 ? 14 : fontScale >= 1.3 ? 12 : 8,
-        paddingVertical: fontScale >= 2.0 ? 8 : fontScale >= 1.6 ? 6 : 4,
+        flexDirection: getBottomFlexDirection(),
+        justifyContent: getBottomJustifyContent(),
+        minHeight: getBottomMinHeight(),
+        gap: getBottomGap(),
+        paddingVertical: getBottomPaddingVertical(),
       }]}>
         <SkipButton
           title="SKIP"
