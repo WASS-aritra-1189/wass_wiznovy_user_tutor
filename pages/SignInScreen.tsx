@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -61,12 +60,96 @@ const SignInScreen: React.FC = () => {
   const fontScale = PixelRatio.getFontScale();
   
   const getResponsiveFontSize = (baseSize: number) => {
-    if (fontScale >= 2.0) return Math.max(baseSize * 0.5, 11);
+    if (fontScale >= 2) return Math.max(baseSize * 0.5, 11);
     if (fontScale >= 1.6) return Math.max(baseSize * 0.65, 12);
     if (fontScale >= 1.3) return Math.max(baseSize * 0.8, 13);
     if (fontScale <= 0.85) return Math.min(baseSize * 1.2, baseSize + 4);
     if (fontScale <= 0.9) return Math.min(baseSize * 1.1, baseSize + 2);
     return baseSize;
+  };
+
+  const getAppTitlePaddingVertical = () => {
+    if (fontScale >= 1.6) return 15;
+    if (fontScale >= 1.3) return 18;
+    if (fontScale <= 0.85) return 25;
+    return 20;
+  };
+
+  const getInputGroupMarginBottom = () => {
+    if (fontScale >= 1.6) return 15;
+    if (fontScale >= 1.3) return 20;
+    if (fontScale <= 0.85) return 30;
+    return 25;
+  };
+
+  const getInputLabelMarginBottom = () => {
+    if (fontScale >= 1.6) return 4;
+    if (fontScale >= 1.3) return 6;
+    if (fontScale <= 0.85) return 10;
+    return 8;
+  };
+
+  const getInputPaddingVertical = () => {
+    if (fontScale >= 1.6) return 8;
+    if (fontScale >= 1.3) return 10;
+    if (fontScale <= 0.85) return 14;
+    return 12;
+  };
+
+  const getButtonPaddingVertical = () => {
+    if (fontScale >= 1.6) return 10;
+    if (fontScale >= 1.3) return 12;
+    if (fontScale <= 0.85) return 18;
+    return 15;
+  };
+
+  const getEmailPlaceholder = () => {
+    if (fontScale >= 2) return "Email";
+    if (fontScale >= 1.6) return "Enter email";
+    return "Please enter your email address";
+  };
+
+  const getPasswordPlaceholder = () => {
+    if (fontScale >= 2) return "Password";
+    if (fontScale >= 1.6) return "Enter password";
+    return "Please enter your Password";
+  };
+
+  const getTermsNumberOfLines = () => {
+    if (fontScale >= 2) return 4;
+    if (fontScale >= 1.6) return 3;
+    if (fontScale <= 0.85) return 1;
+    return 2;
+  };
+
+  const getSignUpMarginTop = () => {
+    if (fontScale >= 1.6) return 20;
+    if (fontScale <= 0.85) return 30;
+    return 25;
+  };
+
+  const getSignUpMarginBottom = () => {
+    if (fontScale >= 1.6) return 40;
+    if (fontScale <= 0.85) return 60;
+    return 50;
+  };
+
+  const getAppTitleMarginBottom = () => {
+    if (fontScale >= 1.6) return 2;
+    if (fontScale <= 0.85) return 6;
+    return 4;
+  };
+
+  const getSignInButtonMarginTop = () => {
+    if (fontScale >= 1.6) return 15;
+    if (fontScale <= 0.85) return 25;
+    return 20;
+  };
+
+  const getSocialSectionMarginBottom = () => {
+    if (fontScale >= 1.6) return 15;
+    if (fontScale <= 0.85) return 25;
+    return 20;
   };
   
   // State management
@@ -178,7 +261,7 @@ const SignInScreen: React.FC = () => {
 
   return (
     <SafeAreaWrapper>
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <StatusBar style="dark" />
       
         {/* Header with back button */}
@@ -198,11 +281,11 @@ const SignInScreen: React.FC = () => {
         <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {/* App Title Section */}
           <View style={[styles.appTitleSection, {
-            paddingVertical: fontScale >= 1.6 ? 15 : fontScale >= 1.3 ? 18 : fontScale <= 0.85 ? 25 : 20,
+            paddingVertical: getAppTitlePaddingVertical(),
           }]}>
             <Text style={[styles.appTitle, {
               fontSize: getResponsiveFontSize(18),
-              marginBottom: fontScale >= 1.6 ? 2 : fontScale <= 0.85 ? 6 : 4,
+              marginBottom: getAppTitleMarginBottom(),
             }]} 
             numberOfLines={fontScale >= 1.6 ? 2 : 1}
             >
@@ -221,11 +304,11 @@ const SignInScreen: React.FC = () => {
           <View style={styles.formSection}>
             {/* Email Field */}
             <View style={[styles.inputGroup, {
-              marginBottom: fontScale >= 1.6 ? 15 : fontScale >= 1.3 ? 20 : fontScale <= 0.85 ? 30 : 25,
+              marginBottom: getInputGroupMarginBottom(),
             }]}>
               <Text style={[styles.inputLabel, {
                 fontSize: getResponsiveFontSize(16),
-                marginBottom: fontScale >= 1.6 ? 4 : fontScale >= 1.3 ? 6 : fontScale <= 0.85 ? 10 : 8,
+                marginBottom: getInputLabelMarginBottom(),
               }]}>Your email address</Text>
               <View style={[
                 styles.inputContainer, 
@@ -235,9 +318,9 @@ const SignInScreen: React.FC = () => {
                 <TextInput
                   style={[styles.inputWithIcon, {
                     fontSize: getResponsiveFontSize(16),
-                    paddingVertical: fontScale >= 1.6 ? 8 : fontScale >= 1.3 ? 10 : fontScale <= 0.85 ? 14 : 12,
+                    paddingVertical: getInputPaddingVertical(),
                   }]}
-                  placeholder={fontScale >= 2.0 ? "Email" : fontScale >= 1.6 ? "Enter email" : "Please enter your email address"}
+                  placeholder={getEmailPlaceholder()}
                   placeholderTextColor="#999"
                   value={email}
                   onChangeText={(text) => {
@@ -255,11 +338,11 @@ const SignInScreen: React.FC = () => {
 
             {/* Password Field */}
             <View style={[styles.inputGroup, {
-              marginBottom: fontScale >= 1.6 ? 15 : fontScale >= 1.3 ? 20 : fontScale <= 0.85 ? 30 : 25,
+              marginBottom: getInputGroupMarginBottom(),
             }]}>
               <Text style={[styles.inputLabel, {
                 fontSize: getResponsiveFontSize(16),
-                marginBottom: fontScale >= 1.6 ? 4 : fontScale >= 1.3 ? 6 : fontScale <= 0.85 ? 10 : 8,
+                marginBottom: getInputLabelMarginBottom(),
               }]}>Your password</Text>
               <View style={[
                 styles.inputContainer, 
@@ -269,9 +352,9 @@ const SignInScreen: React.FC = () => {
                 <TextInput
                   style={[styles.inputWithIcon, {
                     fontSize: getResponsiveFontSize(16),
-                    paddingVertical: fontScale >= 1.6 ? 8 : fontScale >= 1.3 ? 10 : fontScale <= 0.85 ? 14 : 12,
+                    paddingVertical: getInputPaddingVertical(),
                   }]}
-                  placeholder={fontScale >= 2.0 ? "Password" : fontScale >= 1.6 ? "Enter password" : "Please enter your Password"}
+                  placeholder={getPasswordPlaceholder()}
                   placeholderTextColor="#999"
                   value={password}
                   onChangeText={(text) => {
@@ -303,7 +386,7 @@ const SignInScreen: React.FC = () => {
             <TouchableOpacity 
               onPress={() => (navigation as any).navigate('ForgotPassword')} 
               style={[styles.forgotPassword, {
-                marginBottom: fontScale >= 1.6 ? 15 : fontScale >= 1.3 ? 20 : fontScale <= 0.85 ? 30 : 25,
+                marginBottom: getInputGroupMarginBottom(),
               }]}
               disabled={loading}
             >
@@ -341,7 +424,7 @@ const SignInScreen: React.FC = () => {
                 <Text style={[styles.termsText, {
                   fontSize: getResponsiveFontSize(14),
                 }]}
-                numberOfLines={fontScale >= 2.0 ? 4 : fontScale >= 1.6 ? 3 : fontScale <= 0.85 ? 1 : 2}
+                numberOfLines={getTermsNumberOfLines()}
                 >
                   I accept the terms and conditions of this app
                 </Text>
@@ -353,8 +436,8 @@ const SignInScreen: React.FC = () => {
             <TouchableOpacity
               onPress={handleSignIn}
               style={[styles.signInButton, loading && styles.buttonDisabled, {
-                paddingVertical: fontScale >= 1.6 ? 10 : fontScale >= 1.3 ? 12 : fontScale <= 0.85 ? 18 : 15,
-                marginTop: fontScale >= 1.6 ? 15 : fontScale <= 0.85 ? 25 : 20,
+                paddingVertical: getButtonPaddingVertical(),
+                marginTop: getSignInButtonMarginTop(),
               }]}
               disabled={loading}
             >
@@ -370,11 +453,11 @@ const SignInScreen: React.FC = () => {
 
           {/* Social Login Section */}
           <View style={[styles.socialSection, {
-            marginBottom: fontScale >= 1.6 ? 15 : fontScale <= 0.85 ? 25 : 20,
+            marginBottom: getSocialSectionMarginBottom(),
           }]}>
             <Text style={[styles.socialTitle, {
               fontSize: getResponsiveFontSize(16),
-              marginBottom: fontScale >= 1.6 ? 15 : fontScale <= 0.85 ? 25 : 20,
+              marginBottom: getSocialSectionMarginBottom(),
             }]}>Login with social media</Text>
             
             <View style={styles.socialButtons}>
@@ -412,8 +495,8 @@ const SignInScreen: React.FC = () => {
 
           {/* Sign Up Link */}
           <View style={[styles.signUpContainer, {
-            marginTop: fontScale >= 1.6 ? 20 : fontScale <= 0.85 ? 30 : 25,
-            marginBottom: fontScale >= 1.6 ? 40 : fontScale <= 0.85 ? 60 : 50,
+            marginTop: getSignUpMarginTop(),
+            marginBottom: getSignUpMarginBottom(),
           }]}>
             <Text style={[styles.signUpText, {
               fontSize: getResponsiveFontSize(14),
@@ -458,7 +541,7 @@ const SignInScreen: React.FC = () => {
           message={errorMessage}
           onClose={() => setShowErrorPopup(false)}
         />
-      </SafeAreaView>
+      </View>
     </SafeAreaWrapper>
   );
 };
