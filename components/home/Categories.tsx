@@ -25,14 +25,7 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
     return baseSize;
   };
 
-  const getCategoryWidth = () => {
-    if (fontScale >= 2) return 90;
-    if (fontScale >= 1.6) return 85;
-    if (fontScale >= 1.3) return 82;
-    return 80;
-  };
-
-  const getCategoryHeight = () => {
+  const getCategorySize = () => {
     if (fontScale >= 2) return 90;
     if (fontScale >= 1.6) return 85;
     if (fontScale >= 1.3) return 82;
@@ -110,7 +103,7 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesGrid}>
         <TouchableOpacity 
           style={[styles.categoryItem, {
-            width: getCategoryWidth(),
+            width: getCategorySize(),
             marginRight: getCategoryMarginRight(),
           }]}
           activeOpacity={0.7}
@@ -119,8 +112,8 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
           }}
         >
           <View style={[styles.categoryIconContainer, {
-            width: getCategoryWidth(),
-            height: getCategoryHeight(),
+            width: getCategorySize(),
+            height: getCategorySize(),
             borderRadius: getCategoryBorderRadius(),
             marginBottom: getCategoryMarginBottom(),
           }]}>
@@ -143,12 +136,12 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
         </TouchableOpacity>
         
         <TouchableOpacity style={[styles.categoryItem, {
-          width: getCategoryWidth(),
+          width: getCategorySize(),
           marginRight: getCategoryMarginRight(),
         }]} activeOpacity={0.7}>
           <View style={[styles.categoryIconContainer, {
-            width: getCategoryWidth(),
-            height: getCategoryHeight(),
+            width: getCategorySize(),
+            height: getCategorySize(),
             borderRadius: getCategoryBorderRadius(),
             marginBottom: getCategoryMarginBottom(),
           }]}>
@@ -172,15 +165,15 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
         
         <TouchableOpacity 
           style={[styles.categoryItem, {
-            width: getCategoryWidth(),
+            width: getCategorySize(),
             marginRight: getCategoryMarginRight(),
           }]} 
           activeOpacity={0.7}
           onPress={() => navigation?.navigate('Help')}
         >
           <View style={[styles.categoryIconContainer, {
-            width: getCategoryWidth(),
-            height: getCategoryHeight(),
+            width: getCategorySize(),
+            height: getCategorySize(),
             borderRadius: getCategoryBorderRadius(),
             marginBottom: getCategoryMarginBottom(),
           }]}>
@@ -203,12 +196,12 @@ const Categories: React.FC<CategoriesProps> = ({ navigation }) => {
         </TouchableOpacity>
         
         <TouchableOpacity style={[styles.categoryItem, {
-          width: getCategoryWidth(),
+          width: getCategorySize(),
           marginRight: getCategoryMarginRight(),
         }]} activeOpacity={0.7}>
           <View style={[styles.categoryIconContainer, {
-            width: getCategoryWidth(),
-            height: getCategoryHeight(),
+            width: getCategorySize(),
+            height: getCategorySize(),
             borderRadius: getCategoryBorderRadius(),
             marginBottom: getCategoryMarginBottom(),
           }]}>

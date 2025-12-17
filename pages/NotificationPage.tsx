@@ -26,7 +26,7 @@ const NotificationPage: React.FC<NotificationPageProps> = ({
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
-  const { notifications, loading, loadingMore, error, hasMore, currentOffset, total } = useSelector((state: RootState) => state.notifications);
+  const { notifications, loading, loadingMore,hasMore, currentOffset, total } = useSelector((state: RootState) => state.notifications);
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);

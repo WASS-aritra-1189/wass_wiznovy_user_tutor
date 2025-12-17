@@ -129,31 +129,57 @@ const CourseDetailsPage: React.FC<CourseDetailsPageProps> = ({ navigation, route
       {/* Content */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <View style={styles.courseCardWrapper}>
-          <CourseCard
-            image={displayCourse.thumbnailUrl ? { uri: displayCourse.thumbnailUrl } : displayCourse.imageUrl ? { uri: displayCourse.imageUrl } : displayCourse.image || require('../assets/coursemenu.png')}
-            title={displayCourse.name || displayCourse.title}
-            description={displayCourse.description}
-            duration={`${displayCourse.totalDuration || displayCourse.duration} min`}
-            language={displayCourse.language?.name || "English"}
-            price={`$${displayCourse.discountPrice || displayCourse.price}`}
-            totalVideos={`${displayCourse.totalLectures || displayCourse.totalVideos} videos`}
-            rating={displayCourse.averageRating || displayCourse.rating || '4.5'}
-          />
+          {(() => {
+            let courseImage;
+            if (displayCourse.thumbnailUrl) {
+              courseImage = { uri: displayCourse.thumbnailUrl };
+            } else if (displayCourse.imageUrl) {
+              courseImage = { uri: displayCourse.imageUrl };
+            } else {
+              courseImage = displayCourse.image || require('../assets/coursemenu.png');
+            }
+            
+            return (
+              <CourseCard
+                image={courseImage}
+                title={displayCourse.name || displayCourse.title}
+                description={displayCourse.description}
+                duration={`${displayCourse.totalDuration || displayCourse.duration} min`}
+                language={displayCourse.language?.name || "English"}
+                price={`$${displayCourse.discountPrice || displayCourse.price}`}
+                totalVideos={`${displayCourse.totalLectures || displayCourse.totalVideos} videos`}
+                rating={displayCourse.averageRating || displayCourse.rating || '4.5'}
+              />
+            );
+          })()}
         </View>
         
         <View style={styles.detailsCardWrapper}>
-          <CourseDetailsCard
-            image={displayCourse.tutor?.tutorDetail?.profileImage ? { uri: displayCourse.tutor.tutorDetail.profileImage } : displayCourse.thumbnailUrl ? { uri: displayCourse.thumbnailUrl } : require('../assets/coursemenu.png')}
-            authorName={displayCourse.tutor?.tutorDetail?.name || "Instructor"}
-            expertise={displayCourse.tutor?.tutorDetail?.bio || "Expert instructor with years of experience."}
-            startDate={displayCourse.startDate}
-            endDate={displayCourse.endDate}
-            courseName={displayCourse.name || displayCourse.title}
-            price={displayCourse.price}
-            discountPrice={displayCourse.discountPrice}
-            subject={displayCourse.subject?.name}
-            language={displayCourse.language?.name}
-          />
+          {(() => {
+            let detailsImage;
+            if (displayCourse.tutor?.tutorDetail?.profileImage) {
+              detailsImage = { uri: displayCourse.tutor.tutorDetail.profileImage };
+            } else if (displayCourse.thumbnailUrl) {
+              detailsImage = { uri: displayCourse.thumbnailUrl };
+            } else {
+              detailsImage = require('../assets/coursemenu.png');
+            }
+            
+            return (
+              <CourseDetailsCard
+                image={detailsImage}
+                authorName={displayCourse.tutor?.tutorDetail?.name || "Instructor"}
+                expertise={displayCourse.tutor?.tutorDetail?.bio || "Expert instructor with years of experience."}
+                startDate={displayCourse.startDate}
+                endDate={displayCourse.endDate}
+                courseName={displayCourse.name || displayCourse.title}
+                price={displayCourse.price}
+                discountPrice={displayCourse.discountPrice}
+                subject={displayCourse.subject?.name}
+                language={displayCourse.language?.name}
+              />
+            );
+          })()}
         </View>
         
         <View style={styles.authorMessageWrapper}>

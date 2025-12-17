@@ -52,7 +52,7 @@ const LearningTimeChart: React.FC<LearningTimeChartProps> = ({
 
       return (
         <View
-          key={`line-${index}`}
+          key={`line-${item.month}-${data[index + 1].month}`}
           style={[
             styles.lineSegment,
             {
@@ -118,7 +118,7 @@ const LearningTimeChart: React.FC<LearningTimeChartProps> = ({
 
               {/* Bars and line points */}
               {data.map((item, index) => (
-                <View key={item.month} style={[styles.monthContainer, { left: index * monthSpacing }]}>
+                <View key={`month-${item.month}`} style={[styles.monthContainer, { left: index * monthSpacing }]}>
                   {/* Bar for group tuition */}
                   <View 
                     style={[
@@ -148,7 +148,7 @@ const LearningTimeChart: React.FC<LearningTimeChartProps> = ({
             {/* X-axis labels - Fixed positioning */}
             <View style={[styles.xAxisContainer, { width: totalWidth }]}>
               {data.map((item, index) => (
-                <View key={item.month} style={[styles.xAxisLabel, { width: monthSpacing }]}>
+                <View key={`x-axis-${item.month}`} style={[styles.xAxisLabel, { width: monthSpacing }]}>
                   <Text style={styles.xAxisText}>{item.month}</Text>
                 </View>
               ))}

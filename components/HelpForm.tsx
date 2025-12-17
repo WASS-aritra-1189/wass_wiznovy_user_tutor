@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, Platform, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const countries = [
@@ -170,9 +171,9 @@ const HelpForm: React.FC = () => {
                     style={styles.modalList}
                     contentContainerStyle={styles.modalListContent}
                   >
-                    {countries.map((country, index) => (
+                    {countries.map((country) => (
                       <TouchableOpacity
-                        key={index}
+                        key={country.code}
                         style={[
                           styles.modalItem,
                           country.code === countryCode && styles.selectedItem
@@ -223,9 +224,9 @@ const HelpForm: React.FC = () => {
                     style={styles.modalList}
                     contentContainerStyle={styles.modalListContent}
                   >
-                    {concerns.map((item, index) => (
+                    {concerns.map((item) => (
                       <TouchableOpacity
-                        key={index}
+                        key={item}
                         style={[
                           styles.modalItem,
                           item === concern && styles.selectedItem

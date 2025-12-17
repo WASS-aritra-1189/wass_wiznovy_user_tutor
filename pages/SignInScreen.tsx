@@ -140,13 +140,7 @@ const SignInScreen: React.FC = () => {
     return 4;
   };
 
-  const getSignInButtonMarginTop = () => {
-    if (fontScale >= 1.6) return 15;
-    if (fontScale <= 0.85) return 25;
-    return 20;
-  };
-
-  const getSocialSectionMarginBottom = () => {
+  const getStandardMargin = () => {
     if (fontScale >= 1.6) return 15;
     if (fontScale <= 0.85) return 25;
     return 20;
@@ -437,7 +431,7 @@ const SignInScreen: React.FC = () => {
               onPress={handleSignIn}
               style={[styles.signInButton, loading && styles.buttonDisabled, {
                 paddingVertical: getButtonPaddingVertical(),
-                marginTop: getSignInButtonMarginTop(),
+                marginTop: getStandardMargin(),
               }]}
               disabled={loading}
             >
@@ -453,11 +447,11 @@ const SignInScreen: React.FC = () => {
 
           {/* Social Login Section */}
           <View style={[styles.socialSection, {
-            marginBottom: getSocialSectionMarginBottom(),
+            marginBottom: getStandardMargin(),
           }]}>
             <Text style={[styles.socialTitle, {
               fontSize: getResponsiveFontSize(16),
-              marginBottom: getSocialSectionMarginBottom(),
+              marginBottom: getStandardMargin(),
             }]}>Login with social media</Text>
             
             <View style={styles.socialButtons}>

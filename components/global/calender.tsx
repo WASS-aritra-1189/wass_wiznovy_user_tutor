@@ -154,7 +154,7 @@ const Calendar: React.FC<CalendarProps> = ({ onDateSelect }) => {
       <View style={styles.calendarGrid}>
         {calendarDays.map((day, index) => (
           <TouchableOpacity
-            key={index}
+            key={day ? `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}` : `empty-${index}`}
             style={[
               styles.dayCell,
               isDateSelected(day) && styles.selectedDayCell

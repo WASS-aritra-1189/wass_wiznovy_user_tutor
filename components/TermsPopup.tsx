@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
-  Image,
+  
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import TermsConditionsPopup from './TermsConditionsPopup';

@@ -15,8 +15,6 @@ const Availability: React.FC<AvailabilityProps> = ({ onDayPress, onTimePress, on
   
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
-  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
@@ -90,8 +88,6 @@ const Availability: React.FC<AvailabilityProps> = ({ onDayPress, onTimePress, on
                 onPress={() => {
                 
                   setSelectedTime(timeDisplay);
-                  setSelectedSlot(slot);
-                  setSelectedDuration(slot.sessionDuration);
                   
                   onTimePress?.(timeDisplay, slot);
                   
@@ -136,8 +132,6 @@ const Availability: React.FC<AvailabilityProps> = ({ onDayPress, onTimePress, on
                 
                 setSelectedDate(date.full);
                 setSelectedTime(null);
-                setSelectedSlot(null);
-                setSelectedDuration(null);
                 
                 onDatePress?.(date.full);
                 

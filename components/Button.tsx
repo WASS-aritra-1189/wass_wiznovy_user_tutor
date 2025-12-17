@@ -24,27 +24,32 @@ const Button: React.FC<ButtonProps> = ({
   const isLargeFontScale = fontScale >= 1.3;
   const isExtraLargeFontScale = fontScale >= 1.6;
   const hasCustomStyle = style && (style.minHeight || style.paddingVertical);
+  const numberOfLines = fontScale >= 2 ? 2 : isExtraLargeFontScale ? 2 : 1;
+  const buttonVariantStyle = variant === 'primary' ? styles.primaryButton : styles.secondaryButton;
+  const textVariantStyle = variant === 'primary' ? styles.primaryText : styles.secondaryText;
+  const handlePress = disabled ? undefined : onPress;
+  const buttonOpacity = disabled ? 1 : activeOpacity;
   
   return (
     <TouchableOpacity
       style={[
         styles.button,
-        variant === 'primary' ? styles.primaryButton : styles.secondaryButton,
+        buttonVariantStyle,
         !hasCustomStyle && isLargeFontScale && styles.largeFontButton,
         !hasCustomStyle && isExtraLargeFontScale && styles.extraLargeFontButton,
         style,
       ]}
-      onPress={disabled ? undefined : onPress}
-      activeOpacity={disabled ? 1 : activeOpacity}
+      onPress={handlePress}
+      activeOpacity={buttonOpacity}
       disabled={disabled}
     >
       <Text
         style={[
           styles.buttonText,
-          variant === 'primary' ? styles.primaryText : styles.secondaryText,
+          textVariantStyle,
           textStyle,
         ]}
-        numberOfLines={fontScale >= 2.0 ? 2 : isExtraLargeFontScale ? 2 : 1}
+        numberOfLines={numberOfLines}
       >
         {title}
       </Text>

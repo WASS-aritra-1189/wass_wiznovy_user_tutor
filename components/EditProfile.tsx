@@ -147,17 +147,13 @@ const EditProfile: React.FC<EditProfileProps> = ({ visible, onClose, onUpdate })
       const selectedCountry = countries.find(c => c.name === formData.country);
       
       // Map firstName to name and dateOfBirth to dob for API
+      const { firstName, dateOfBirth, country, ...restFormData } = formData;
       const updateData = {
-        ...formData,
-        name: formData.firstName, // API expects 'name' field
-        dob: formData.dateOfBirth, // API expects 'dob' field
+        ...restFormData,
+        name: firstName, // API expects 'name' field
+        dob: dateOfBirth, // API expects 'dob' field
         countryId: selectedCountry?.id, // Send country ID instead of name
       };
-      
-      // Remove the original fields that are mapped
-      delete updateData.firstName;
-      delete updateData.dateOfBirth;
-      delete updateData.country;
       
       console.log('Sending update data:', updateData);
       const response = await updateUserProfile(updateData);
@@ -290,7 +286,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ visible, onClose, onUpdate })
       console.error(`Error picking image (attempt ${retryCount + 1}):`, error);
       
       // Check for specific ActivityResultLauncher error
-      if (error.message && error.message.includes('unregistered ActivityResultLauncher') && retryCount < MAX_RETRIES) {
+      if (error.message?.includes('unregistered ActivityResultLauncher') && retryCount < MAX_RETRIES) {
         console.log(`Retrying image picker... Attempt ${retryCount + 1}`);
         // Reset readiness and retry
         setIsImagePickerReady(false);

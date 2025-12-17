@@ -90,7 +90,7 @@ const BookDetailPage: React.FC<BookDetailPageProps> = ({ route, navigation, book
         >
           {bannerImages.map((image, index) => (
             <Image 
-              key={`banner-image-${index}`} 
+              key={`banner-${index}-${image}`} 
               source={image} 
               style={[styles.bannerImage, { width: imageWidth }]} 
               resizeMode="cover"
@@ -102,7 +102,7 @@ const BookDetailPage: React.FC<BookDetailPageProps> = ({ route, navigation, book
           <View style={styles.paginationContainer}>
             {bannerImages.map((_, index) => (
               <View
-                key={`pagination-dot-${index}`}
+                key={`dot-${index}-${bannerImages.length}`}
                 style={[
                   styles.paginationDot,
                   currentIndex === index && styles.paginationDotActive
@@ -114,8 +114,8 @@ const BookDetailPage: React.FC<BookDetailPageProps> = ({ route, navigation, book
       </View>
 
       <View style={styles.categoryContainer}>
-        {categories.map((category, index) => (
-          <TouchableOpacity key={`category-${category}-${index}`} style={styles.categoryButton}>
+        {categories.map((category) => (
+          <TouchableOpacity key={category} style={styles.categoryButton}>
             <Text style={styles.categoryText}>{category}</Text>
           </TouchableOpacity>
         ))}

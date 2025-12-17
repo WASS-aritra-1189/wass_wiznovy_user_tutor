@@ -38,8 +38,6 @@ export const getTutorAvailableSlots = async (tutorId: string, date: string): Pro
 
     
     if (!response.ok) {
-      const errorText = await response.text();
-      
       return null;
     }
 
@@ -48,7 +46,7 @@ export const getTutorAvailableSlots = async (tutorId: string, date: string): Pro
     
     return data;
   } catch (error) {
-
+    console.error('Error fetching tutor available slots:', error instanceof Error ? error.message : error);
     return null;
   }
 };

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getUserSessions, cancelSession, UserSession, SessionsResponse, CancelSessionResponse } from '../services/sessionService';
+import { getUserSessions, cancelSession, UserSession, CancelSessionResponse } from '../services/sessionService';
 
 interface SessionState {
   sessions: UserSession[];

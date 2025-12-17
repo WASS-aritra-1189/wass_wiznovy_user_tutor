@@ -27,7 +27,7 @@ interface MyScheduledProps {
 
 const MyScheduled: React.FC<MyScheduledProps> = ({ navigation, onBack }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { sessions, loading, cancelLoading, error } = useSelector((state: RootState) => state.sessions);
+  const { sessions, loading, cancelLoading} = useSelector((state: RootState) => state.sessions);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showError, setShowError] = useState(false);
   const [errorStatus, setErrorStatus] = useState<'starts_soon' | 'ended'>('starts_soon');

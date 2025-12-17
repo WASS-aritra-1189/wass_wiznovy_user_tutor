@@ -123,11 +123,14 @@ const MySchedule: React.FC<MyScheduleProps> = ({ onClose, initialDate, showLiveO
   // Show cancellation success with refund info
   useEffect(() => {
     if (cancelResponse) {
-      const refundMessage = cancelResponse.refundEligible 
-        ? (cancelResponse.refundProcessed 
+      let refundMessage;
+      if (cancelResponse.refundEligible) {
+        refundMessage = cancelResponse.refundProcessed 
           ? 'Refund has been processed.' 
-          : 'You are eligible for a refund. It will be processed shortly.')
-        : 'No refund applicable for this cancellation.';
+          : 'You are eligible for a refund. It will be processed shortly.';
+      } else {
+        refundMessage = 'No refund applicable for this cancellation.';
+      }
       
       Alert.alert(
         'Session Cancelled',

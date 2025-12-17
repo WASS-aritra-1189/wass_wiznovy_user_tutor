@@ -45,7 +45,7 @@ const OtpInput: React.FC<OtpInputProps> = ({ length, onOtpChange, value }) => {
             otp[index] ? styles.inputFilled : null,
           ]}
           value={otp[index] || ''}
-          onChangeText={(text) => handleChange(text.replace(/[^0-9]/g, ''), index)}
+          onChangeText={(text) => handleChange(text.replaceAll(/\D/g, ''), index)}
           onKeyPress={({ nativeEvent }) => handleKeyPress(nativeEvent.key, index)}
           keyboardType="numeric"
           maxLength={1}

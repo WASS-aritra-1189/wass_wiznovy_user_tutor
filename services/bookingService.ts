@@ -46,6 +46,7 @@ export const bookSession = async (bookingData: BookingRequest): Promise<BookingR
     const data = await response.json();
     return data;
   } catch (error) {
+    console.error('Booking session failed:', error);
     return null;
   }
 };

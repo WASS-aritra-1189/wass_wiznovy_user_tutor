@@ -64,6 +64,9 @@ export const getUserSessions = async (
     return data;
   } catch (error) {
     console.error('💥 Sessions fetch error:', error);
+    if (error instanceof Error) {
+      console.error('💥 Sessions error message:', error.message);
+    }
     return null;
   }
 };
@@ -138,7 +141,7 @@ export const rescheduleSession = async (
         const errorJson = JSON.parse(responseText);
         console.error('❌ Parsed error:', JSON.stringify(errorJson, null, 2));
       } catch (e) {
-        console.error('❌ Could not parse error response as JSON');
+        console.error('❌ Could not parse error response as JSON:', e);
       }
       
       return null;
@@ -201,6 +204,10 @@ export const cancelSession = async (sessionId: string): Promise<CancelSessionRes
     }
   } catch (error) {
     console.error('💥 Cancel network/other error:', error);
+    if (error instanceof Error) {
+      console.error('💥 Cancel error message:', error.message);
+      console.error('💥 Cancel error stack:', error.stack);
+    }
     return null;
   }
 };

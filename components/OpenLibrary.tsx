@@ -144,7 +144,7 @@ const OpenLibrary: React.FC<OpenLibraryProps> = ({ navigation }) => {
           >
             {images.map((image, index) => (
               <Image 
-                key={index}
+                key={`image-${index}-${image}`}
                 source={image}
                 style={styles.libraryImage} 
                 resizeMode="cover" 
@@ -156,7 +156,7 @@ const OpenLibrary: React.FC<OpenLibraryProps> = ({ navigation }) => {
             <View style={styles.paginationContainer}>
               {images.map((_, index) => (
                 <View
-                  key={index}
+                  key={`pagination-${index}-${images.length}`}
                   style={[
                     styles.paginationDot,
                     currentIndex === index && styles.paginationDotActive

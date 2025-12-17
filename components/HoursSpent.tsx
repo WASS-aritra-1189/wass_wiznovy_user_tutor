@@ -96,8 +96,8 @@ const HoursSpent: React.FC<HoursSpentProps> = ({
           <Text style={styles.totalHours}>{totalHours} Hrs</Text>
           
           <View style={styles.legendList}>
-            {legendData.map((item, index) => (
-              <View key={index} style={styles.legendRow}>
+            {legendData.map((item) => (
+              <View key={item.name} style={styles.legendRow}>
                 <View style={[styles.colorIndicator, { backgroundColor: item.color }]} />
                 <Text style={styles.legendLabel}>
                   {item.name} ({item.percentage}%)

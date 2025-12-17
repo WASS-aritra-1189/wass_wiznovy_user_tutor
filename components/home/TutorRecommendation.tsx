@@ -70,7 +70,7 @@ const TutorRecommendation: React.FC = () => {
     return 2;
   };
 
-  const getSmallGap = () => {
+  const getSmallSpacing = () => {
     if (fontScale >= 2) return 6;
     if (fontScale >= 1.6) return 5;
     return 4;
@@ -107,13 +107,7 @@ const TutorRecommendation: React.FC = () => {
     return 6;
   };
 
-  const getMediumPadding = () => {
-    if (fontScale >= 2) return 6;
-    if (fontScale >= 1.6) return 5;
-    return 4;
-  };
-
-  const getContainerGap = () => {
+  const getSmallGapValue = () => {
     if (fontScale >= 2) return 4;
     if (fontScale >= 1.6) return 3;
     return 2;
@@ -203,7 +197,7 @@ const TutorRecommendation: React.FC = () => {
                 }]}>
                   <View style={[styles.tutorNameRow, {
                     marginBottom: getTutorNameMarginBottom(),
-                    gap: getSmallGap(),
+                    gap: getSmallSpacing(),
                     justifyContent: getJustifyContent(),
                   }]}>
                     <Text style={[styles.tutorName, {
@@ -238,8 +232,8 @@ const TutorRecommendation: React.FC = () => {
                   }]}>
                     <View style={[styles.sessionContainer, {
                       paddingHorizontal: getLargePaddingHorizontal(),
-                      paddingVertical: getMediumPadding(),
-                      gap: getContainerGap(),
+                      paddingVertical: getSmallSpacing(),
+                      gap: getSmallGapValue(),
                     }]}>
                       <Image 
                         source={require('../../assets/dollar.png')} 
@@ -255,7 +249,7 @@ const TutorRecommendation: React.FC = () => {
                     </View>
                     <View style={[styles.ratingContainer, {
                       paddingHorizontal: getLargePaddingHorizontal(),
-                      paddingVertical: getMediumPadding(),
+                      paddingVertical: getSmallSpacing(),
                     }]}>
                       <Text style={[styles.ratingText, {
                         fontSize: getResponsiveFontSize(8, fontScale),
@@ -264,7 +258,7 @@ const TutorRecommendation: React.FC = () => {
                   </View>
 
                   <View style={[styles.tuitionTypeRow, {
-                    gap: getSmallGap(),
+                    gap: getSmallSpacing(),
                     justifyContent: getJustifyContent(),
                     flexWrap: getFlexWrap(),
                   }]}>

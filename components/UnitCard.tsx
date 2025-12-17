@@ -9,7 +9,6 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface UnitCardProps {
-  id: string;
   name: string;
   description: string;
   imageUrl: string;

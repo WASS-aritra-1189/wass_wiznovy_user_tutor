@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import {
   View,
   Text,
@@ -92,63 +92,88 @@ const RescheduleAvailability: React.FC<RescheduleAvailabilityProps> = ({
         showsHorizontalScrollIndicator={false}
         style={styles.dateScrollView}
       >
-        {dates.map((date) => (
-          <TouchableOpacity
-            key={date.fullDate}
-            style={[
-              styles.dateButton,
-              selectedDate === date.fullDate && styles.selectedDateButton
-            ]}
-            onPress={() => handleDatePress(date.fullDate)}
-          >
-            <Text style={[
-              styles.dayText,
-              selectedDate === date.fullDate && styles.selectedText
-            ]}>
-              {date.dayName}
-            </Text>
-            <Text style={[
-              styles.dateText,
-              selectedDate === date.fullDate && styles.selectedText
-            ]}>
-              {date.display}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        {dates.map((date) => {
+          const isDateSelected = selectedDate === date.fullDate;
+          const dateButtonStyle = isDateSelected ? styles.selectedDateButton : null;
+          const selectedTextStyle = isDateSelected ? styles.selectedText : null;
+          
+          return (
+            <TouchableOpacity
+              key={date.fullDate}
+              style={[
+                styles.dateButton,
+                dateButtonStyle
+              ]}
+              onPress={() => handleDatePress(date.fullDate)}
+            >
+              <Text style={[
+                styles.dayText,
+                selectedTextStyle
+              ]}>
+                {date.dayName}
+              </Text>
+              <Text style={[
+                styles.dateText,
+                selectedTextStyle
+              ]}>
+                {date.display}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
 
       {/* Time Slots */}
       <View style={styles.timeSlotsContainer}>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#16423C" />
-            <Text style={styles.loadingText}>Loading available slots...</Text>
-          </View>
-        ) : selectedDate ? (
-          availableSlots.length > 0 ? (
+        {(() => {
+          if (loading) {
+            return (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="small" color="#16423C" />
+                <Text style={styles.loadingText}>Loading available slots...</Text>
+              </View>
+            );
+          }
+          
+          if (!selectedDate) {
+            return (
+              <Text style={styles.selectDateText}>Please select a date to view available slots</Text>
+            );
+          }
+          
+          if (availableSlots.length === 0) {
+            return (
+              <Text style={styles.noSlotsText}>No available slots for this date</Text>
+            );
+          }
+          
+          return (
             <ScrollView style={styles.slotsScrollView}>
               <View style={styles.slotsGrid}>
                 {availableSlots.map((slot, index) => {
                   const isSelected = selectedTimeSlot?.start === slot.start && 
                                    selectedTimeSlot?.end === slot.end;
+                  const timeSlotButtonStyle = isSelected ? styles.selectedTimeSlotButton : null;
+                  const textStyle = isSelected ? styles.selectedText : null;
+                  
                   return (
                     <TouchableOpacity
                       key={`${slot.start}-${slot.end}-${index}`}
                       style={[
                         styles.timeSlotButton,
-                        isSelected && styles.selectedTimeSlotButton
+                        timeSlotButtonStyle
                       ]}
                       onPress={() => handleTimeSlotPress(slot)}
                     >
                       <Text style={[
                         styles.timeSlotText,
-                        isSelected && styles.selectedText
+                        textStyle
                       ]}>
                         {slot.start} - {slot.end}
                       </Text>
                       <Text style={[
                         styles.priceText,
-                        isSelected && styles.selectedText
+                        textStyle
                       ]}>
                         ${slot.price}
                       </Text>
@@ -157,12 +182,8 @@ const RescheduleAvailability: React.FC<RescheduleAvailabilityProps> = ({
                 })}
               </View>
             </ScrollView>
-          ) : (
-            <Text style={styles.noSlotsText}>No available slots for this date</Text>
-          )
-        ) : (
-          <Text style={styles.selectDateText}>Please select a date to view available slots</Text>
-        )}
+          );
+        })()}
       </View>
     </View>
   );

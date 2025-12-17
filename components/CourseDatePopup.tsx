@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-  Image,
+  
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 

@@ -23,8 +23,8 @@ const CourseReceiptPopup: React.FC<CourseReceiptPopupProps> = ({
   price,
   discountPrice,
 }) => {
-  const originalPrice = parseFloat(price || '0');
-  const finalPrice = parseFloat(discountPrice || price || '0');
+  const originalPrice = Number.parseFloat(price || '0');
+  const finalPrice = Number.parseFloat(discountPrice || price || '0');
   const savings = originalPrice - finalPrice;
 
   return (

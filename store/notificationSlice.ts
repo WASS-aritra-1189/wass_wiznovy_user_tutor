@@ -23,9 +23,9 @@ const initialState: NotificationState = {
 
 export const fetchNotifications = createAsyncThunk(
   'notifications/fetchNotifications',
-  async (params: { limit?: number; offset?: number; loadMore?: boolean } = {}, { rejectWithValue }) => {
+  async (params: { limit?: number; offset?: number; loadMore?: boolean } | undefined, { rejectWithValue }) => {
     try {
-      const { limit = 15, offset = 0, loadMore = false } = params;
+      const { limit = 15, offset = 0, loadMore = false } = params || {};
       const response = await getNotifications(limit, offset);
       if (response.success) {
         return {
