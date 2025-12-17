@@ -206,7 +206,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ navigation }) => {
               {/* Tutors */}
               {searchResults.filter(r => r.type === 'Tutor').map((result) => (
                 <TouchableOpacity 
-                  key={`tutor-${result.id || result.name || Math.random()}`} 
+                  key={`tutor-${result.id}`} 
                   style={styles.tutorCard}
                   onPress={() => {
                     // Use account.id if available, fallback to main id
@@ -247,7 +247,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ navigation }) => {
               {/* Courses in 2-column grid */}
               <View style={styles.coursesGrid}>
                 {searchResults.filter(r => r.type === 'Course').map((result) => (
-                  <TouchableOpacity key={`course-${result.id || result.name || Math.random()}`} style={styles.courseCard}>
+                  <TouchableOpacity key={`course-${result.id}`} style={styles.courseCard}>
                     <View style={styles.courseImageContainer}>
                       <Image 
                         source={require('../assets/courses.png')} 
@@ -291,7 +291,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ navigation }) => {
               
               {/* Books */}
               {searchResults.filter(r => r.type === 'Book').map((result) => (
-                <TouchableOpacity key={`book-${result.id || result.name || result.title || Math.random()}`} style={styles.bookCard}>
+                <TouchableOpacity key={`book-${result.id}`} style={styles.bookCard}>
                   <View style={styles.bookContent}>
                     <View style={styles.bookImageContainer}>
                       <Image 
@@ -313,7 +313,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ navigation }) => {
               {searchResults.filter(r => r.type === 'Subject').map((result) => {
                 console.log('🔍 Rendering Subject:', result);
                 return (
-                  <TouchableOpacity key={`subject-${result.id || Math.random()}`} style={styles.subjectCard}>
+                  <TouchableOpacity key={`subject-${result.id}`} style={styles.subjectCard}>
                     <View style={styles.subjectContent}>
                       <View style={styles.subjectIconContainer}>
                         <Image 

@@ -54,7 +54,7 @@ const CategorySubjectsPage: React.FC<CategorySubjectsPageProps> = ({
               subjectName = subject.name.name || subject.name.title || 'Unknown';
             }
             const transformed = {
-              id: String(subject.id || Math.random()),
+              id: String(subject.id),
               image: subject.image || require('../assets/subjects.png'),
               title: `${subjectName} Tutor`,
               expertCount: '5',

@@ -49,7 +49,7 @@ const ClassSchedulePage: React.FC<ClassSchedulePageProps> = ({ onBack }) => {
 
   const handleJoinClass = (classId: number) => {
     // Simulate different error states
-    const status = Math.random() > 0.5 ? 'starts_soon' : 'ended';
+    const status = classId> 2.5 ? 'starts_soon' : 'ended';
     setErrorStatus(status);
     setShowError(true);
   };
