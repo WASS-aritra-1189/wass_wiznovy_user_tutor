@@ -183,32 +183,19 @@ const SignInScreen: React.FC = () => {
     setErrors({});
 
     try {
-      let token: string | undefined;
-
-      // Handle both bypass and normal login
-      if (email.trim() === 'aritrasharma@gmail.com' && password.trim() === '123456') {
-        console.log('Bypass login triggered');
-        // Use a more realistic bypass token or skip token validation
-        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkJ5cGFzcyBVc2VyIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-      } else {
-        // Normal API login
-        const result = await loginUser({ email, password });
-        
-        if (!result.success) {
-          setErrorMessage(result.message || 'Login failed');
-          setShowErrorPopup(true);
-          return;
-        }
-        
-        token = result.data?.token;
+      const result = await loginUser({ email, password });
+      
+      if (!result.success) {
+        setErrorMessage(result.message || 'Login failed');
+        setShowErrorPopup(true);
+        return;
       }
-
-      // Store token and show success
+      
+      const token = result.data?.token;
       if (token) {
         await storeToken(token);
       }
 
-      // Show success popup for both flows
       setShowSuccessPopup(true);
 
     } catch (error) {
