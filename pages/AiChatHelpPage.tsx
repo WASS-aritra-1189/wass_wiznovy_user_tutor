@@ -127,94 +127,85 @@ const AiChatHelpPage: React.FC = () => {
     }
   };
 
+  const renderTutorCards = (tutors: any[]) => {
+    return tutors.slice(0, 5).map((tutor, index) => {
+      const teacher: Teacher = {
+        id: String(tutor.id || index),
+        name: String(tutor.name || 'Tutor'),
+        subject: String(tutor.subject || 'General'),
+        rating: Number(tutor.rating) || 4.5,
+        sessions: String(tutor.sessions || '10+'),
+        groupTuition: Boolean(tutor.groupTuition !== false),
+        privateTuition: Boolean(tutor.privateTuition !== false),
+        image: tutor.profilePicture ? String(tutor.profilePicture) : undefined,
+        isNew: Boolean(tutor.isNew)
+      };
+      return (
+        <TeacherCard 
+          key={`tutor-${tutor.id || tutor.name || index}`}
+          teacher={teacher}
+          onPress={() => {
+            navigation?.navigate('TutorDetailPage', { 
+              tutorId: tutor.account?.id || tutor.id, 
+              tutor: {
+                ...tutor,
+                name: tutor.name || 'Tutor',
+                subject: { name: tutor.subject || 'General' },
+                averageRating: tutor.rating?.toString() || '4.5',
+                hourlyRate: tutor.sessions?.replace('$', '').replace('/hr', '') || '50'
+              }
+            });
+          }}
+        />
+      );
+    });
+  };
+
+  const renderCourseCards = (courses: any[]) => {
+    return courses.slice(0, 5).map((course, index) => (
+      <CourseCard 
+        key={`course-${course.id || course.title || index}`}
+        image={require('../assets/coursefinalimage.png')}
+        title={course.title || 'Course'}
+        description={course.description || 'Course description'}
+        duration={course.duration || 'N/A'}
+        language={course.language || 'English'}
+        price={course.price || 'Free'}
+        totalVideos={course.totalVideos || '0'}
+        rating={course.rating || '0'}
+      />
+    ));
+  };
+
+  const renderBookCards = (books: any[]) => {
+    return books.slice(0, 5).map((book, index) => (
+      <BookCard 
+        key={`book-${book.id || book.title || book.name || index}`}
+        title={book.title || book.name || 'Book Title'}
+        author={book.author || book.writer || 'Unknown Author'}
+        description={book.description || book.summary || 'Book description'}
+      />
+    ));
+  };
+
+  const renderSubjectCards = (subjects: any[]) => {
+    return subjects.slice(0, 5).map((subject, index) => (
+      <SubjectCard 
+        key={`subject-${subject.id || subject.name || index}`}
+        id={subject.id}
+        name={subject.name}
+        image={subject.image}
+      />
+    ));
+  };
+
   const renderCards = (data: any) => {
     const allCards: React.ReactElement[] = [];
     
-    // Add tutor cards
-    if (data.tutors?.result) {
-      const tutors = data.tutors.result.slice(0, 5);
-      for (const [index, tutor] of tutors.entries()) {
-        const teacher: Teacher = {
-          id: String(tutor.id || index),
-          name: String(tutor.name || 'Tutor'),
-          subject: String(tutor.subject || 'General'),
-          rating: Number(tutor.rating) || 4.5,
-          sessions: String(tutor.sessions || '10+'),
-          groupTuition: Boolean(tutor.groupTuition !== false),
-          privateTuition: Boolean(tutor.privateTuition !== false),
-          image: tutor.profilePicture ? String(tutor.profilePicture) : undefined,
-          isNew: Boolean(tutor.isNew)
-        };
-        allCards.push(
-          <TeacherCard 
-            key={`tutor-${index}`}
-            teacher={teacher}
-            onPress={() => {
-              navigation?.navigate('TutorDetailPage', { 
-                tutorId: tutor.account?.id || tutor.id, 
-                tutor: {
-                  ...tutor,
-                  name: tutor.name || 'Tutor',
-                  subject: { name: tutor.subject || 'General' },
-                  averageRating: tutor.rating?.toString() || '4.5',
-                  hourlyRate: tutor.sessions?.replace('$', '').replace('/hr', '') || '50'
-                }
-              });
-            }}
-          />
-        );
-      }
-    }
-    
-    // Add course cards
-    if (data.courses?.result) {
-      const courses = data.courses.result.slice(0, 5);
-      for (const [index, course] of courses.entries()) {
-        allCards.push(
-          <CourseCard 
-            key={`course-${index}`}
-            image={require('../assets/coursefinalimage.png')}
-            title={course.title || 'Course'}
-            description={course.description || 'Course description'}
-            duration={course.duration || 'N/A'}
-            language={course.language || 'English'}
-            price={course.price || 'Free'}
-            totalVideos={course.totalVideos || '0'}
-            rating={course.rating || '0'}
-          />
-        );
-      }
-    }
-    
-    // Add book cards
-    if (data.books?.result && data.books.result.length > 0) {
-      const books = data.books.result.slice(0, 5);
-      for (const [index, book] of books.entries()) {
-        allCards.push(
-          <BookCard 
-            key={`book-${index}`}
-            title={book.title || book.name || 'Book Title'}
-            author={book.author || book.writer || 'Unknown Author'}
-            description={book.description || book.summary || 'Book description'}
-          />
-        );
-      }
-    }
-    
-    // Add subject cards
-    if (data.subjects?.result && data.subjects.result.length > 0) {
-      const subjects = data.subjects.result.slice(0, 5);
-      for (const [index, subject] of subjects.entries()) {
-        allCards.push(
-          <SubjectCard 
-            key={`subject-${index}`}
-            id={subject.id}
-            name={subject.name}
-            image={subject.image}
-          />
-        );
-      }
-    }
+    if (data.tutors?.result) allCards.push(...renderTutorCards(data.tutors.result));
+    if (data.courses?.result) allCards.push(...renderCourseCards(data.courses.result));
+    if (data.books?.result?.length > 0) allCards.push(...renderBookCards(data.books.result));
+    if (data.subjects?.result?.length > 0) allCards.push(...renderSubjectCards(data.subjects.result));
     
     return (
       <ScrollView 
